@@ -37,6 +37,10 @@ if (mongoURL == null) {
         mongoPort = mongoUriParts[1];
       }
     }
+  } else {
+    mongoHost = "mongo";
+    mongoPort = "27017";
+    mongoDatabase = "sampledb";
   }
 
   if (mongoHost && mongoPort && mongoDatabase) {
