@@ -1,0 +1,34 @@
+biometria
+{
+  codigo: "000123"
+  nome: "Hildebrando Furlan Neto",
+  perfil: "Morador",
+  perfil_acesso: "001, 002, 003, 004",
+  apartamento: { bloco: "0", unidade: "271"},
+  foto: hex,
+  observacoes: "",
+  data_cadastro: "2018-01-01 00:00:00"
+}
+
+/biometria?codigo=000123&nome=Hildebrando Furlan Neto&perfil=Morador&perfil_acesso=001&apartamento=271&foto=hex&observacoes=&data_cadastro=2018-01-01 00:00:00
+
+
+veiculo
+{
+  serial: "206A2B9",
+  marca: "Hyundai",
+  cor: "cinza",
+  placa: "ABC1234",
+  foto: hex,
+  rotulo: "Hildebrando Furlan Neto",
+  data_cadastro: "2018-01-01 00:00:00"
+}
+
+/veiculo?serial=206A2B9&marca=Hyundai&cor=cinza&placa=ABC1234&foto=hex&rotulo=Hildebrando Furlan Neto&data_cadastro=2018-01-01 00:00:00
+
+evento { tipo: "B", id: "000123", panico: "N", data_hora: "2018-01-01 00:00:00"}
+
+/evento?tipo=B&id=000123&panico=N
+
+&data_hora: "2018-01-01 00:00:00"
+
