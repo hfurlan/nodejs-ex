@@ -2,7 +2,10 @@
 var express = require('express'),
     app     = express(),
     morgan  = require('morgan');
-    
+var mongodb = require('mongodb');
+var MongoClient = require('mongodb').MongoClient;
+var db;
+
 Object.assign=require('object-assign')
 
 app.engine('html', require('ejs').renderFile);
@@ -53,64 +56,28 @@ if (mongoURL == null) {
     mongoURL += mongoHost + ':' +  mongoPort + '/' + mongoDatabase;
   }
 }
-var db = null,
-    dbDetails = new Object();
 
-var initDb = function(callback) {
-  if (mongoURL == null) return;
-
-  var mongodb = require('mongodb');
-  if (mongodb == null) return;
-
-  mongodb.connect(mongoURL, function(err, conn) {
-    if (err) {
-      callback(err);
-      return;
-    }
-
-    db = conn;
-    dbDetails.databaseName = db.databaseName;
-    dbDetails.url = mongoURLLabel;
-    dbDetails.type = 'MongoDB';
-
-    console.log('Connected to MongoDB at: %s', mongoURL);
-  });
-};
-
+// URLs
 app.get('/', function (req, res) {
-  // try to initialize the db on every request if it's not already
-  // initialized.
-  if (!db) {
-    initDb(function(err){});
-  }
-  if (db) {
-    var col = db.collection('counts');
-    // Create a document with request IP and current time of request
-    col.insert({ip: req.ip, date: Date.now()});
-    col.count(function(err, count){
-      if (err) {
-        console.log('Error running count. Message:\n'+err);
-      }
-      res.render('index.html', { pageCountMessage : count, dbInfo: dbDetails });
-    });
-  } else {
-    res.render('index.html', { pageCountMessage : null});
-  }
+  res.render('index.html');
 });
 
-app.get('/pagecount', function (req, res) {
-  // try to initialize the db on every request if it's not already
-  // initialized.
-  if (!db) {
-    initDb(function(err){});
-  }
-  if (db) {
-    db.collection('counts').count(function(err, count ){
-      res.send('{ pageCount: ' + count + '}');
-    });
-  } else {
-    res.send('{ pageCount: -1 }');
-  }
+app.get('/biometria', function (req, res) {
+  var biometria = { codigo: req.query.codigo, nome: req.query.nome, perfil: req.query.perfil, perfil_acesso: req.query.perfil_acesso, apartamento: req.query.apartamento, foto: req.query.foto, observacoes: req.query.observacoes, data_cadastro: req.query.data_cadastro };
+  db.collection("biometrias").insert(biometria);
+  res.send('{ status: 1 }');
+});
+
+app.get('/veiculo', function (req, res) {
+  var veiculo = { serial: req.query.serial, marca: req.query.marca, cor: req.query.cor, placa: req.query.placa, foto: req.query.foto, rotulo: req.query.rotulo, data_cadastro: req.query.data_cadastro };
+  db.collection("veiculos").insert(veiculo);
+  res.send('{ status: 1 }');
+});
+
+app.get('/evento', function (req, res) {
+  var evento = { tipo: req.query.tipo, id: req.query.id, panico: req.query.panico, data_hora: req.query.data_hora };
+  db.collection("eventos").insert(evento);
+  res.send('{ status: 1 }');
 });
 
 // error handling
@@ -119,11 +86,16 @@ app.use(function(err, req, res, next){
   res.status(500).send('Something bad happened!');
 });
 
-initDb(function(err){
-  console.log('Error connecting to Mongo. Message:\n'+err);
-});
+// Initialize connection with MongoDB once
+MongoClient.connect(mongoURL, function(err, database) {
+  if(err) throw err;
 
-app.listen(port, ip);
-console.log('Server running on http://%s:%s', ip, port);
+  db = database;
+  console.log('Connected to MongoDB at: %s', mongoURL);
+
+  // Start the application after the database connection is ready
+  app.listen(port, ip);
+  console.log('Server running on http://%s:%s', ip, port);
+});
 
 module.exports = app ;
