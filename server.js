@@ -2,10 +2,7 @@
 var express = require('express'),
     app     = express(),
     morgan  = require('morgan');
-var mongodb = require('mongodb');
 var bodyParser = require('body-parser');
-var MongoClient = require('mongodb').MongoClient;
-var db;
 
 Object.assign=require('object-assign')
 
@@ -60,27 +57,67 @@ if (mongoURL == null) {
   }
 }
 
+// Conexao com MongoDB
+var db = null,
+    dbDetails = new Object();
+
+var initDb = function(callback) {
+  if (mongoURL == null) return;
+
+  var mongodb = require('mongodb');
+  if (mongodb == null) return;
+
+  mongodb.connect(mongoURL, function(err, conn) {
+    if (err) {
+      callback(err);
+      return;
+    }
+
+    db = conn;
+    dbDetails.databaseName = db.databaseName;
+    dbDetails.url = mongoURLLabel;
+    dbDetails.type = 'MongoDB';
+
+    console.log('Connected to MongoDB at: %s', mongoURL);
+  });
+};
+
 // URLs
 app.get('/', function (req, res) {
   res.render('index.html');
 });
 
 app.post('/biometria', function (req, res) {
-  var biometria = { _id: req.body.codigo, nome: req.body.nome, perfil: req.body.perfil, perfil_acesso: req.body.perfil_acesso, apartamento: req.body.apartamento, foto: req.body.foto, observacoes: req.body.observacoes, data_cadastro: req.body.data_cadastro, data_envio: req.body.data_envio };
-  db.collection("biometrias").update({ _id : biometria._id }, biometria, {upsert: true})
-  res.send('{ status: 1 }');
+  if (!db) {
+    initDb(function(err){});
+  }
+  if (db) {
+    var biometria = { _id: req.body.codigo, nome: req.body.nome, perfil: req.body.perfil, perfil_acesso: req.body.perfil_acesso, apartamento: req.body.apartamento, foto: req.body.foto, observacoes: req.body.observacoes, data_cadastro: req.body.data_cadastro, data_envio: req.body.data_envio };
+    db.collection("biometrias").update({ _id : biometria._id }, biometria, {upsert: true})
+    res.send('{ status: 1 }');
+  }
 });
 
 app.post('/veiculo', function (req, res) {
-  var veiculo = { _id: req.body.serial, marca: req.body.marca, cor: req.body.cor, placa: req.body.placa, foto: req.body.foto, rotulo: req.body.rotulo, data_cadastro: req.body.data_cadastro, data_envio: req.body.data_envio };
-  db.collection("veiculos").update({ _id : veiculo._id }, veiculo, {upsert: true})
-  res.send('{ status: 1 }');
+  if (!db) {
+    initDb(function(err){});
+  }
+  if (db) {
+    var veiculo = { _id: req.body.serial, marca: req.body.marca, cor: req.body.cor, placa: req.body.placa, foto: req.body.foto, rotulo: req.body.rotulo, data_cadastro: req.body.data_cadastro, data_envio: req.body.data_envio };
+    db.collection("veiculos").update({ _id : veiculo._id }, veiculo, {upsert: true})
+    res.send('{ status: 1 }');
+  }
 });
 
 app.post('/evento', function (req, res) {
-  var evento = { tipo: req.body.tipo, id: req.body.id, panico: req.body.panico, data_hora: req.body.data_hora };
-  db.collection("eventos").insert(evento);
-  res.send('{ status: 1 }');
+  if (!db) {
+    initDb(function(err){});
+  }
+  if (db) {
+    var evento = { tipo: req.body.tipo, id: req.body.id, panico: req.body.panico, data_hora: req.body.data_hora };
+    db.collection("eventos").insert(evento);
+    res.send('{ status: 1 }');
+  }
 });
 
 // error handling
@@ -89,16 +126,11 @@ app.use(function(err, req, res, next){
   res.status(500).send('Something bad happened!');
 });
 
-// Initialize connection with MongoDB once
-MongoClient.connect(mongoURL, function(err, database) {
-  if(err) throw err;
-
-  db = database;
-  console.log('Connected to MongoDB at: %s', mongoURL);
-
-  // Start the application after the database connection is ready
-  app.listen(port, ip);
-  console.log('Server running on http://%s:%s', ip, port);
+initDb(function(err){
+  console.log('Error connecting to Mongo. Message:\n'+err);
 });
+
+app.listen(port, ip);
+console.log('Server running on http://%s:%s', ip, port);
 
 module.exports = app ;
