@@ -3,6 +3,7 @@ var express = require('express'),
     app     = express(),
     morgan  = require('morgan');
 var mongodb = require('mongodb');
+var bodyParser = require('body-parser');
 var MongoClient = require('mongodb').MongoClient;
 var db;
 
@@ -10,6 +11,8 @@ Object.assign=require('object-assign')
 
 app.engine('html', require('ejs').renderFile);
 app.use(morgan('combined'))
+app.use(bodyParser.json()); // support json encoded bodies
+app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 
 var port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8080,
     ip   = process.env.IP   || process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0',
@@ -62,20 +65,20 @@ app.get('/', function (req, res) {
   res.render('index.html');
 });
 
-app.get('/biometria', function (req, res) {
-  var biometria = { codigo: req.query.codigo, nome: req.query.nome, perfil: req.query.perfil, perfil_acesso: req.query.perfil_acesso, apartamento: req.query.apartamento, foto: req.query.foto, observacoes: req.query.observacoes, data_cadastro: req.query.data_cadastro };
-  db.collection("biometrias").insert(biometria);
+app.post('/biometria', function (req, res) {
+  var biometria = { _id: req.body.codigo, nome: req.body.nome, perfil: req.body.perfil, perfil_acesso: req.body.perfil_acesso, apartamento: req.body.apartamento, foto: req.body.foto, observacoes: req.body.observacoes, data_cadastro: req.body.data_cadastro, data_envio: req.body.data_envio };
+  db.collection("biometrias").update({ _id : biometria._id }, biometria, {upsert: true})
   res.send('{ status: 1 }');
 });
 
-app.get('/veiculo', function (req, res) {
-  var veiculo = { serial: req.query.serial, marca: req.query.marca, cor: req.query.cor, placa: req.query.placa, foto: req.query.foto, rotulo: req.query.rotulo, data_cadastro: req.query.data_cadastro };
-  db.collection("veiculos").insert(veiculo);
+app.post('/veiculo', function (req, res) {
+  var veiculo = { _id: req.body.serial, marca: req.body.marca, cor: req.body.cor, placa: req.body.placa, foto: req.body.foto, rotulo: req.body.rotulo, data_cadastro: req.body.data_cadastro, data_envio: req.body.data_envio };
+  db.collection("veiculos").update({ _id : veiculo._id }, veiculo, {upsert: true})
   res.send('{ status: 1 }');
 });
 
-app.get('/evento', function (req, res) {
-  var evento = { tipo: req.query.tipo, id: req.query.id, panico: req.query.panico, data_hora: req.query.data_hora };
+app.post('/evento', function (req, res) {
+  var evento = { tipo: req.body.tipo, id: req.body.id, panico: req.body.panico, data_hora: req.body.data_hora };
   db.collection("eventos").insert(evento);
   res.send('{ status: 1 }');
 });

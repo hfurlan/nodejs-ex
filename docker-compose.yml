@@ -6,7 +6,20 @@ services:
     - "8080:8080"
     depends_on:
     - mongo
+
   mongo:
     image: mongo
     ports:
     - "27017:27017"
+
+#  express:
+#    image: node:7.7.2-alpine
+#    container_name: express-container
+#    ports:
+#      - 3000:3000
+#    volumes:
+#      - .:/application/
+#      - /application/node_modules
+#    links:
+#      - mongo
+#    working_dir: /application

@@ -32,3 +32,16 @@ evento { tipo: "B", id: "000123", panico: "N", data_hora: "2018-01-01 00:00:00"}
 
 &data_hora: "2018-01-01 00:00:00"
 
+--Desenvolvimento
+
+Em ambiente de desenvolvimento, para validar se os dados foram inseridos corretamente na base, é possivel conectar direto no mongo
+
+docker exec -it nodejs-ex_mongo_1 /bin/bash
+
+Ao acessar o docker, digitar "mongo" e fazer as devidas validacoes:
+
+use sampledb
+db.biometrias.find()
+
+
+
