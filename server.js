@@ -114,7 +114,7 @@ app.post('/evento', function (req, res) {
     initDb(function(err){});
   }
   if (db) {
-    var evento = { tipo: req.body.tipo, id: req.body.id, panico: req.body.panico, data_hora: req.body.data_hora };
+    var evento = { tipo: req.body.tipo, id: req.body.id, panico: req.body.panico, terminal: req.body.terminal, data_hora: req.body.data_hora };
     db.collection("eventos").insert(evento);
     res.send('{ status: 1 }');
   }
