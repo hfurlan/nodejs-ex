@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Controle de Acesso</title>
+</head>
+<body>
+<h1 class="text-center title-1"> Lista de Veiculos </h1>
+<table>
+  <tr>
+    <th><a href="veiculos?order=_id">#</a></th>
+    <th><a href="veiculos?order=apartamento">Apartamento</a></th>
+    <th><a href="veiculos?order=marca">Marca</a></th>
+    <th><a href="veiculos?order=cor">Cor</a></th>
+    <th><a href="veiculos?order=placa">Placa</a></th>
+    <th><a href="veiculos?order=rotulo">Rotulo</a></th>
+  </tr>
+  <% veiculos.forEach(function(veiculo){ %>
+  <tr>
+    <td><%= veiculo._id %></td>
+    <td><%= veiculo.apartamento %></td>
+    <td><%= veiculo.marca %></td>
+    <td><%= veiculo.cor %></td>
+    <td><%= veiculo.placa %></td>
+    <td><%= veiculo.rotulo %></td>
+  </tr>
+  <%})%>
+</table>
+</body>
+</html>

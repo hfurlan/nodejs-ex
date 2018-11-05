@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Controle de Acesso</title>
+</head>
+<body>
+<ul id="eventos"></ul>
+<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+<script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+<script>
+  $(function () {
+    var socket = io();
+    socket.on('novo evento', function(msg){
+      $('#eventos').append($('<li>').text(msg));
+      window.scrollTo(0, document.body.scrollHeight);
+    });
+  });
+</script>
+</body>
+</html>

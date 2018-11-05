@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Controle de Acesso</title>
+</head>
+<body>
+<h1 class="text-center title-1">Lista de Biometrias</h1>
+<table>
+  <tr>
+    <th><a href="biometrias?order=_id">#</a></th>
+    <th><a href="biometrias?order=apartamento">Apartamento</a></th>
+    <th><a href="biometrias?order=nome">Nome</a></th>
+    <th><a href="biometrias?order=perfil">Perfil</a></th>
+    <th>Imagem</th>
+  </tr>
+  <% biometrias.forEach(function(biometria){ %>
+  <tr>
+    <td><%= biometria._id %></td>
+    <td><%= biometria.apartamento %></td>
+    <td><%= biometria.nome %></td>
+    <td><%= biometria.perfil %></td>
+    <td><img src="data:image/jpeg;US-ASCII,<%= biometria.foto %>"></td>
+  </tr>
+  <%})%>
+</table>
+</body>
+</html>
