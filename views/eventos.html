@@ -10,6 +10,7 @@
 <table>
   <tr>
     <th><a href="eventos?order=_id">#</a></th>
+    <th><a href="eventos?order=id">Codigo/Serial</a></th>
     <th><a href="eventos?order=tipo">Tipo</a></th>
     <th><a href="eventos?order=panico">Panico</a></th>
     <th><a href="eventos?order=bateria_fraca">Bateria Fraca</a></th>
@@ -18,6 +19,7 @@
   <% eventos.forEach(function(evento){ %>
   <tr>
     <td><%= evento._id %></td>
+    <td><%= evento.id %></td>
     <td><%= evento.tipo %></td>
     <td><%= evento.panico %></td>
     <td><%= evento.bateria_fraca %></td>
