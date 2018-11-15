@@ -14,8 +14,8 @@ app.use(morgan('combined'))
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 
-var http = require('http').Server(app);
-var io = require('socket.io')(http);
+//var http = require('http').Server(app);
+//var io = require('socket.io')(http);
 
 var port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8080,
     ip   = process.env.IP   || process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0',
@@ -111,6 +111,9 @@ var VeiculoSchema = new mongoose.Schema({
 });
 var EventoSchema = new mongoose.Schema({
   _id: String,
+  codigo: String,
+  serial: String,
+  local: String,
   tipo: String,
   panico: String,
   bateria_fraca: String,
@@ -183,9 +186,9 @@ app.post('/evento', function (req, res) {
     initDb(function(err){});
   }
   if (db) {
-    var evento = { tipo: req.body.tipo, id: req.body.id, panico: req.body.panico, bateria_fraca: req.body.bateria_fraca, terminal: req.body.terminal, data_hora: req.body.data_hora };
+    var evento = { tipo: req.body.tipo, codigo: req.body.codigo, serial: req.body.serial, local: req.body.local, panico: req.body.panico, bateria_fraca: req.body.bateria_fraca, data_hora: req.body.data_hora };
     db.collection("eventos").insert(evento);
-    io.emit('novo evento', evento);
+    //io.emit('novo evento', evento);
     //var cursor = db.collection("socket_ids").find({})
     //while(cursor.hasNext()){
     //  socketId = cursor.next();
@@ -208,14 +211,14 @@ app.get('/eventos', function (req, res) {
 });
 
 // WebSockets
-io.on('connection', function(socket){
-  console.log('user connected ' + socket.id);
-  //db.collection("socket_ids").insert({ _id: socket.id});
-  socket.on('disconnect', function(){
-    console.log('user disconnected ' + socket.id);
-    //db.collection("socket_ids").delete_many({ _id: socket.id})
-  });
-});
+//io.on('connection', function(socket){
+//  console.log('user connected ' + socket.id);
+//  //db.collection("socket_ids").insert({ _id: socket.id});
+//  socket.on('disconnect', function(){
+//    console.log('user disconnected ' + socket.id);
+//    //db.collection("socket_ids").delete_many({ _id: socket.id})
+//  });
+//});
 
 // error handling
 app.use(function(err, req, res, next){

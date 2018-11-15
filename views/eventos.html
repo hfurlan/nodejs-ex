@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
+  <meta http-equiv="refresh" content="5">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <title>Controle de Acesso</title>
 </head>
@@ -9,18 +10,20 @@
 <h1 class="text-center title-1"> Lista dos ultimos eventos </h1>
 <table>
   <tr>
-    <th><a href="eventos?order=_id">#</a></th>
-    <th><a href="eventos?order=id">Codigo/Serial</a></th>
-    <th><a href="eventos?order=tipo">Tipo</a></th>
-    <th><a href="eventos?order=panico">Panico</a></th>
-    <th><a href="eventos?order=bateria_fraca">Bateria Fraca</a></th>
-    <th><a href="eventos?order=data_hora">Data</a></th>
+    <th>#</th>
+    <th>Codigo/Serial</th>
+    <th>Tipo</th>
+    <th>Local</th>
+    <th>Panico</th>
+    <th>Bateria Fraca</th>
+    <th>Data</th>
   </tr>
   <% eventos.forEach(function(evento){ %>
   <tr>
     <td><%= evento._id %></td>
-    <td><%= evento.id %></td>
+    <td><%= evento.codigo %><%= evento.serial %></td>
     <td><%= evento.tipo %></td>
+    <td><%= evento.local %></td>
     <td><%= evento.panico %></td>
     <td><%= evento.bateria_fraca %></td>
     <td><%= evento.data_hora %></td>
