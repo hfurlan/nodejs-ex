@@ -60,7 +60,7 @@ OpenShift
 
 1) Clicar em Terminal
 2) mongo -u admin -p $MONGODB_ADMIN_PASSWORD admin 
-3) sampledb
+3) use sampledb
 4) db.eventos.count()
 ;
 
