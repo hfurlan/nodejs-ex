@@ -53,4 +53,14 @@ http://localhost:8081
 
 https://www.codeproject.com/Questions/1110737/How-to-display-image-from-binary-data-in-javascrip
 
+----------------------------
+OpenShift
+
+- Ao clicar no Pod do OpenShift, pode utilizar o comandos abaixo para verificar os dados:
+
+1) Clicar em Terminal
+2) mongo -u admin -p $MONGODB_ADMIN_PASSWORD admin 
+3) sampledb
+4) db.eventos.count()
+;
 

@@ -204,7 +204,7 @@ app.get('/eventos', function (req, res) {
     initDb(function(err){});
   }
   if (db) {
-   Evento.find({ $query: {}, $orderby: { _id : -1 } }, (err, eventos) => {
+   Evento.find().sort( { _id : -1 } , (err, eventos) => {
       res.render('eventos.html', { eventos: eventos})
    }).limit(50);
   }
