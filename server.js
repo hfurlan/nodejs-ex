@@ -4,6 +4,7 @@ var express = require('express'),
     morgan  = require('morgan');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose')
+var fs = require('fs');
 
 Object.assign=require('object-assign')
 
@@ -13,9 +14,7 @@ app.set('view engine', 'html');
 app.use(morgan('combined'))
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
-
-//var http = require('http').Server(app);
-//var io = require('socket.io')(http);
+app.use(express.static(__dirname + '/public'))
 
 var port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8080,
     ip   = process.env.IP   || process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0',
@@ -76,15 +75,6 @@ var initDb = function(callback) {
   mongoose.connect(mongoURL);
   db = mongoose.connection;
 
-//  Trigger - Avisar todos os clientes que estiverem ouvindo tambem via websocket
-//  db.collection('eventos').watch().on('change', evento =>
-//    var cursor = db.collection("socket_ids").find({})
-//    while(cursor.hasNext()){
-//      socketId = cursor.next();
-//      console.log('enviando para ' + socketId);
-//      io.sockets.socket(socketId).emit('novo evento', evento);
-//    }
-//  );
 };
 
 // Schemas
@@ -129,10 +119,6 @@ app.get('/', function (req, res) {
   res.render('index.html');
 });
 
-app.get('/online', function (req, res) {
-  res.render('online.html', { port: port, ip: ip});
-});
-
 app.post('/biometria', function (req, res) {
   if (!db) {
     initDb(function(err){});
@@ -140,6 +126,14 @@ app.post('/biometria', function (req, res) {
   if (db) {
     var biometria = { _id: req.body.codigo, nome: req.body.nome, perfil: req.body.perfil, perfil_acesso: req.body.perfil_acesso, apartamento: req.body.apartamento, foto: req.body.foto, observacoes: req.body.observacoes, data_cadastro: req.body.data_cadastro, data_envio: req.body.data_envio };
     db.collection("biometrias").update({ _id : biometria._id }, biometria, {upsert: true})
+    if(biometria.foto){
+      var b = new Buffer(biometria.foto, 'hex');
+      fs.writeFile("public/images/" + biometria._id + ".jpg", b, function (err) {
+        if (err) {
+            return console.log(err);
+        }
+      });
+    }
     res.send();
   }
 });
@@ -186,15 +180,8 @@ app.post('/evento', function (req, res) {
     initDb(function(err){});
   }
   if (db) {
-    var evento = { tipo: req.body.tipo, codigo: req.body.codigo, serial: req.body.serial, local: req.body.local, panico: req.body.panico, bateria_fraca: req.body.bateria_fraca, data_hora: req.body.data_hora };
-    db.collection("eventos").insert(evento);
-    //io.emit('novo evento', evento);
-    //var cursor = db.collection("socket_ids").find({})
-    //while(cursor.hasNext()){
-    //  socketId = cursor.next();
-    //  console.log('enviando para ' + socketId);
-    //  socket.broadcast.to(socketId).emit('novo evento', evento);
-    //}
+    var evento = { tipo: req.body.tipo, codigo: req.body.codigo, serial: req.body.serial, local: req.body.local, panico: req.body.panico, bateria_fraca: req.body.bateria_fraca, data_hora: new Date(parseInt(req.body.data_hora)) };
+    db.collection("eventos").insertOne(evento);
     res.send();
   }
 });
@@ -210,15 +197,67 @@ app.get('/eventos', function (req, res) {
   }
 });
 
-// WebSockets
-//io.on('connection', function(socket){
-//  console.log('user connected ' + socket.id);
-//  //db.collection("socket_ids").insert({ _id: socket.id});
-//  socket.on('disconnect', function(){
-//    console.log('user disconnected ' + socket.id);
-//    //db.collection("socket_ids").delete_many({ _id: socket.id})
-//  });
-//});
+app.get('/online', function (req, res) {
+  res.render('online.html')
+});
+
+app.post('/online_biometria', function (req, res) {
+  if (!db) {
+    initDb(function(err){});
+  }
+  if (db) {
+    console.log('evento_biometria_id:%s', req.body.evento_biometria_id);
+    Evento.findOne( { $query: { tipo: 'B', codigo: { $ne: null }, codigo: { $ne: '' }, _id: { $ne: req.body.evento_biometria_id } }, $orderby: { data_hora : -1 } }, { foto: 0 }, (err, evento_biometria) => {
+      if (err) throw err;
+      if (evento_biometria == null) return;
+
+      // Buscar a biometria associada ao evento
+      Biometria.findOne({ _id: evento_biometria.codigo}, { foto: 0 }, (err, biometria) => {
+        var evento = evento_biometria.toObject();
+        evento.biometria = biometria;
+
+        // Buscar biometrias do mesmo apartamento
+        Biometria.find({ $query: { apartamento: biometria.apartamento, _id: { $ne: evento_biometria.codigo } } }, { foto: 0 }, (err, biometrias_associadas) => {
+          evento.biometrias_associadas = biometrias_associadas;
+
+          // Retornar o evento populado com todas as informacoes necessarias para a tela
+          console.log('Evento:%j', evento);
+          res.setHeader('Content-Type', 'application/json');
+          res.send(evento);
+        });
+      });
+    }).limit(1);
+  }
+});
+
+app.post('/online_veiculo', function (req, res) {
+  if (!db) {
+    initDb(function(err){});
+  }
+  if (db) {
+    console.log('evento_veiculo_id:%s', req.body.evento_veiculo_id);
+    Evento.findOne( { $query: { tipo: 'L', serial: { $ne: null }, serial: { $ne: '' }, _id: { $ne: req.body.evento_veiculo_id } }, $orderby: { data_hora : -1 } }, { foto: 0 }, (err, evento_veiculo) => {
+      if (err) throw err;
+      if (evento_veiculo == null) return;
+
+      // Buscar o veiculo associada ao evento
+      Veiculo.findOne({ _id: evento_veiculo.serial}, (err, veiculo) => {
+        var evento = evento_veiculo.toObject();
+        evento.veiculo = veiculo;
+
+        // Buscar veiculos do mesmo apartamento
+        Veiculo.find({ $query: { apartamento: veiculo.apartamento, _id: { $ne: evento_veiculo.serial } } }, (err, veiculos_associados) => {
+          evento.veiculos_associados = veiculos_associados;
+
+          // Retornar o evento populado com todas as informacoes necessarias para a tela
+          console.log('Evento:%j', evento);
+          res.setHeader('Content-Type', 'application/json');
+          res.send(evento);
+        });
+      });
+    }).limit(1);
+  }
+});
 
 // error handling
 app.use(function(err, req, res, next){

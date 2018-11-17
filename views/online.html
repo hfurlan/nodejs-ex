@@ -6,17 +6,154 @@
   <title>Controle de Acesso</title>
 </head>
 <body>
-<ul id="eventos"></ul>
-<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
-<script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+<table>
+  <tr>
+    <th><h1 class="text-center title-1">Biometrias</h1></th>
+    <th><h1 class="text-center title-1">Veiculos</h1></th>
+  </tr>
+  <tr>
+    <td>
+      <table>
+        <tr>
+          <td rowspan="4" colspan="2"><img id="evento_biometria_foto" src=""/></td>
+        </tr>
+        <tr>
+          <td>Apartamento:</td>
+          <td><span id="evento_biometria_apartamento"></span></td>
+        </tr>
+        <tr>
+          <td>Nome:</td>
+          <td><span id="evento_biometria_nome"></span></td>
+        </tr>
+        <tr>
+          <td>Local:</td>
+          <td><span id="evento_biometria_local"></span></td>
+        </tr>
+      </table>
+      <table>
+        <tr>
+          <td>Biometrias associadas</td>
+        </tr>
+        <tr>
+          <td id="evento_biometria_associadas"></td>
+        </tr>
+      </table>
+      <hr/>
+        <!--
+      Últimas leituras
+      <table>
+        <tr>
+          <th>Apartamento</th>
+          <th>Nome</th>
+          <th>Horario</th>
+        </tr>
+      </table>
+      -->
+    </td>
+    <td>
+        <table>
+            <tr>
+                <td rowspan="6" colspan="2"><img id="evento_veiculo_foto" src=""/></td>
+            </tr>
+            <tr>
+                <td>Apartamento:</td>
+                <td><span id="evento_veiculo_apartamento"></span></td>
+            </tr>
+            <tr>
+                <td>Rotulo:</td>
+                <td><span id="evento_veiculo_rotulo"></span></td>
+            </tr>
+            <tr>
+                <td>Marca:</td>
+                <td><span id="evento_veiculo_marca"></span></td>
+            </tr>
+            <tr>
+                <td>Cor:</td>
+                <td><span id="evento_veiculo_cor"></span></td>
+            </tr>
+            <tr>
+                <td>Placa:</td>
+                <td><span id="evento_veiculo_placa"></span></td>
+            </tr>
+        </table>
+        <table>
+            <tr>
+                <td>Veiculos associadas</td>
+            </tr>
+            <tr>
+                <td id="evento_veiculo_associados"></td>
+            </tr>
+        </table>
+        <hr/>
+        <!--
+      Últimas leituras
+      <table>
+        <tr>
+          <th>Apartamento</th>
+          <th>Nome</th>
+          <th>Horario</th>
+        </tr>
+      </table>
+      -->
+    </td>
+  </tr>
+</table>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script>
-  $(function () {
-    var socket = io();
-    socket.on('novo evento', function(msg){
-      $('#eventos').append($('<li>').text(msg));
-      window.scrollTo(0, document.body.scrollHeight);
-    });
+evento_biometria_id = -1;
+evento_veiculo_id = -1;
+var find_biometria = function () {
+  $.ajax({
+    type: "POST",
+    data: "evento_biometria_id="+evento_biometria_id,
+    url: "online_biometria",
+    success: function(evento_biometria,status) {
+      if(evento_biometria._id){
+        evento_biometria_id = evento_biometria._id;
+        $('#evento_biometria_foto').attr('src', '/images/'+evento_biometria.biometria._id+'.jpg');
+        $("#evento_biometria_apartamento").text(evento_biometria.biometria.apartamento);
+        $("#evento_biometria_nome").text(evento_biometria.biometria.nome);
+        $("#evento_biometria_local").text(evento_biometria.local);
+        var associadas = '';
+        $.each(evento_biometria.biometrias_associadas, function(i, biometria_associada) {
+          associadas += '<div><img src="/images/'+biometria_associada._id+'.jpg"/><br/>'+biometria_associada.nome+'</div>'
+        });
+        $("#evento_biometria_associadas").html(associadas);
+      }
+      setTimeout(find_biometria, 5000);
+    },
+    dataType: 'json'
   });
+}
+var find_veiculo = function () {
+  $.ajax({
+    type: "POST",
+    data: "evento_veiculo_id="+evento_veiculo_id,
+    url: "online_veiculo",
+    success: function(evento_veiculo,status) {
+      if(evento_veiculo._id){
+        evento_veiculo_id = evento_veiculo._id;
+        $('#evento_veiculo_foto').attr('src', '/images/'+evento_veiculo.veiculo._id+'.jpg');
+        $("#evento_veiculo_apartamento").text(evento_veiculo.veiculo.apartamento);
+        $("#evento_veiculo_rotulo").text(evento_veiculo.veiculo.rotulo);
+        $("#evento_veiculo_marca").text(evento_veiculo.veiculo.marca);
+        $("#evento_veiculo_cor").text(evento_veiculo.veiculo.cor);
+        $("#evento_veiculo_placa").text(evento_veiculo.veiculo.placa);
+        var associados = '';
+        $.each(evento_veiculo.veiculos_associados, function(i, veiculo_associado) {
+          associados += '<div><img src="/images/'+veiculo_associado._id+'.jpg"/><br/>'+veiculo_associado.placa+'</div>'
+        });
+        $("#evento_veiculo_associados").html(associados);
+      }
+      setTimeout(find_veiculo, 5000);
+    },
+    dataType: 'json'
+  });
+}
+$( document ).ready(function() {
+  find_biometria();
+  find_veiculo();
+});
 </script>
 </body>
 </html>
