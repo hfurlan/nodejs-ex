@@ -6,14 +6,14 @@
   <title>Controle de Acesso</title>
 </head>
 <body>
-<table>
+<table width="100%">
   <tr>
-    <th><h1 class="text-center title-1">Biometrias</h1></th>
-    <th><h1 class="text-center title-1">Veiculos</h1></th>
+    <th width="50%"><h1 class="text-center title-1">Biometrias</h1></th>
+    <th width="50%"><h1 class="text-center title-1">Veiculos</h1></th>
   </tr>
   <tr>
     <td>
-      <table>
+      <table width="100%">
         <tr>
           <td rowspan="4" colspan="2"><img id="evento_biometria_foto" src=""/></td>
         </tr>
@@ -30,12 +30,13 @@
           <td><span id="evento_biometria_local"></span></td>
         </tr>
       </table>
-      <table>
+      <hr/>
+      <table width="100%">
         <tr>
           <td>Biometrias associadas</td>
         </tr>
         <tr>
-          <td id="evento_biometria_associadas"></td>
+          <td id="evento_biometria_associadas" style="display:inline;"></td>
         </tr>
       </table>
       <hr/>
@@ -51,7 +52,7 @@
       -->
     </td>
     <td>
-        <table>
+        <table width="100%">
             <tr>
                 <td rowspan="6" colspan="2"><img id="evento_veiculo_foto" src=""/></td>
             </tr>
@@ -76,15 +77,24 @@
                 <td><span id="evento_veiculo_placa"></span></td>
             </tr>
         </table>
-        <table>
+        <hr/>
+        <table width="100%">
+            <tr>
+                <td>Pessoas associadas</td>
+            </tr>
+            <tr>
+                <td id="evento_veiculo_biometria_associadas" style="display:inline;"></td>
+            </tr>
+        </table>
+        <hr/>
+        <table width="100%">
             <tr>
                 <td>Veiculos associadas</td>
             </tr>
             <tr>
-                <td id="evento_veiculo_associados"></td>
+                <td id="evento_veiculo_associados" style="display:inline;"></td>
             </tr>
         </table>
-        <hr/>
         <!--
       Últimas leituras
       <table>
@@ -141,9 +151,14 @@ var find_veiculo = function () {
         $("#evento_veiculo_placa").text(evento_veiculo.veiculo.placa);
         var associados = '';
         $.each(evento_veiculo.veiculos_associados, function(i, veiculo_associado) {
-          associados += '<div><img src="/images/'+veiculo_associado._id+'.jpg"/><br/>'+veiculo_associado.placa+'</div>'
+          associados += '<div>Marca: ' + veiculo_associado.marca + '<br/>Cor: ' + veiculo_associado.cor + '<br/>Placa: ' + veiculo_associado.placa + '<br/></div>'
         });
         $("#evento_veiculo_associados").html(associados);
+        var associadas = '';
+        $.each(evento_veiculo.biometrias_associadas, function(i, biometria_associada) {
+          associadas += '<div><img src="/images/'+biometria_associada._id+'.jpg"/><br/>'+biometria_associada.nome+'</div>'
+        });
+        $("#evento_veiculo_biometria_associadas").html(associadas);
       }
       setTimeout(find_veiculo, 5000);
     },

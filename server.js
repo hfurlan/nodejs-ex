@@ -86,8 +86,8 @@ var BiometriaSchema = new mongoose.Schema({
   apartamento: String,
   foto: String,
   observacoes: String,
-  data_cadastro: String,
-  data_envio: String
+  data_cadastro: Date,
+  data_envio: Date
 });
 var VeiculoSchema = new mongoose.Schema({
   _id: String,
@@ -96,8 +96,8 @@ var VeiculoSchema = new mongoose.Schema({
   placa: String,
   apartamento: String,
   rotulo: String,
-  data_cadastro: String,
-  data_envio: String
+  data_cadastro: Date,
+  data_envio: Date
 });
 var EventoSchema = new mongoose.Schema({
   _id: String,
@@ -107,7 +107,7 @@ var EventoSchema = new mongoose.Schema({
   tipo: String,
   panico: String,
   bateria_fraca: String,
-  data_hora: String
+  data_hora: Date
 });
 
 var Biometria = mongoose.model('Biometria', BiometriaSchema);
@@ -124,7 +124,7 @@ app.post('/biometria', function (req, res) {
     initDb(function(err){});
   }
   if (db) {
-    var biometria = { _id: req.body.codigo, nome: req.body.nome, perfil: req.body.perfil, perfil_acesso: req.body.perfil_acesso, apartamento: req.body.apartamento, foto: req.body.foto, observacoes: req.body.observacoes, data_cadastro: req.body.data_cadastro, data_envio: req.body.data_envio };
+    var biometria = { _id: req.body.codigo, nome: req.body.nome, perfil: req.body.perfil, perfil_acesso: req.body.perfil_acesso, apartamento: req.body.apartamento, foto: req.body.foto, observacoes: req.body.observacoes, data_cadastro: new Date(parseInt(req.body.data_cadastro)), data_envio: new Date(parseInt(req.body.data_envio)) };
     db.collection("biometrias").update({ _id : biometria._id }, biometria, {upsert: true})
     if(biometria.foto){
       var b = new Buffer(biometria.foto, 'hex');
@@ -147,7 +147,7 @@ app.get('/biometrias', function (req, res) {
     if(req.query.order){
       fieldOrder = req.query.order;
     }
-    Biometria.find({ $query: {}, $orderby: { fieldOrder : -1 } }, (err, biometrias) => {
+    Biometria.find({}, null, { sort: { apartamento : 1 } }, (err, biometrias) => {
       res.render('biometrias.html', { biometrias: biometrias})
     });
   }
@@ -158,7 +158,7 @@ app.post('/veiculo', function (req, res) {
     initDb(function(err){});
   }
   if (db) {
-    var veiculo = { _id: req.body.serial, marca: req.body.marca, cor: req.body.cor, placa: req.body.placa, apartamento: req.body.apartamento, rotulo: req.body.rotulo, data_cadastro: req.body.data_cadastro, data_envio: req.body.data_envio };
+    var veiculo = { _id: req.body.serial, marca: req.body.marca, cor: req.body.cor, placa: req.body.placa, apartamento: req.body.apartamento, rotulo: req.body.rotulo, data_cadastro: new Date(parseInt(req.body.data_cadastro)), data_envio: new Date(parseInt(req.body.data_envio)) };
     db.collection("veiculos").update({ _id : veiculo._id }, veiculo, {upsert: true})
     res.send();
   }
@@ -169,7 +169,7 @@ app.get('/veiculos', function (req, res) {
     initDb(function(err){});
   }
   if (db) {
-   Veiculo.find({}, (err, veiculos) => {
+   Veiculo.find({}, null, { sort: { apartamento : 1 } }, (err, veiculos) => {
       res.render('veiculos.html', { veiculos: veiculos})
    });
   }
@@ -191,7 +191,7 @@ app.get('/eventos', function (req, res) {
     initDb(function(err){});
   }
   if (db) {
-   Evento.find( { $query: {}, $orderby: { _id : -1 } }, (err, eventos) => {
+   Evento.find({}, null, { sort: { data_hora: -1 } }, (err, eventos) => {
       res.render('eventos.html', { eventos: eventos})
    }).limit(50);
   }
@@ -207,12 +207,13 @@ app.post('/online_biometria', function (req, res) {
   }
   if (db) {
     console.log('evento_biometria_id:%s', req.body.evento_biometria_id);
-    Evento.findOne( { $query: { tipo: 'B', codigo: { $ne: null }, codigo: { $ne: '' }, _id: { $ne: req.body.evento_biometria_id } }, $orderby: { data_hora : -1 } }, { foto: 0 }, (err, evento_biometria) => {
+    Evento.findOne({ tipo: 'B', codigo: { $ne: null }, codigo: { $ne: '' }, _id: { $ne: req.body.evento_biometria_id } }, { foto: 0 }, { sort: { data_hora: -1 } }, (err, evento_biometria) => {
       if (err) throw err;
       if (evento_biometria == null) return;
 
       // Buscar a biometria associada ao evento
       Biometria.findOne({ _id: evento_biometria.codigo}, { foto: 0 }, (err, biometria) => {
+        if (biometria == null) return;
         var evento = evento_biometria.toObject();
         evento.biometria = biometria;
 
@@ -226,7 +227,7 @@ app.post('/online_biometria', function (req, res) {
           res.send(evento);
         });
       });
-    }).limit(1);
+    });
   }
 });
 
@@ -236,12 +237,13 @@ app.post('/online_veiculo', function (req, res) {
   }
   if (db) {
     console.log('evento_veiculo_id:%s', req.body.evento_veiculo_id);
-    Evento.findOne( { $query: { tipo: 'L', serial: { $ne: null }, serial: { $ne: '' }, _id: { $ne: req.body.evento_veiculo_id } }, $orderby: { data_hora : -1 } }, { foto: 0 }, (err, evento_veiculo) => {
+    Evento.findOne({ tipo: 'L', serial: { $ne: null }, serial: { $ne: '' }, _id: { $ne: req.body.evento_veiculo_id } }, null, { sort: { data_hora: -1 } }, (err, evento_veiculo) => {
       if (err) throw err;
       if (evento_veiculo == null) return;
 
       // Buscar o veiculo associada ao evento
       Veiculo.findOne({ _id: evento_veiculo.serial}, (err, veiculo) => {
+        if (veiculo == null) return;
         var evento = evento_veiculo.toObject();
         evento.veiculo = veiculo;
 
@@ -249,13 +251,18 @@ app.post('/online_veiculo', function (req, res) {
         Veiculo.find({ $query: { apartamento: veiculo.apartamento, _id: { $ne: evento_veiculo.serial } } }, (err, veiculos_associados) => {
           evento.veiculos_associados = veiculos_associados;
 
-          // Retornar o evento populado com todas as informacoes necessarias para a tela
-          console.log('Evento:%j', evento);
-          res.setHeader('Content-Type', 'application/json');
-          res.send(evento);
+          // Buscar biometrias do mesmo apartamento
+          Biometria.find({ $query: { apartamento: veiculo.apartamento } }, { foto: 0 }, (err, biometrias_associadas) => {
+            evento.biometrias_associadas = biometrias_associadas;
+
+            // Retornar o evento populado com todas as informacoes necessarias para a tela
+            console.log('Evento:%j', evento);
+            res.setHeader('Content-Type', 'application/json');
+            res.send(evento);
+          });
         });
       });
-    }).limit(1);
+    });
   }
 });
 
