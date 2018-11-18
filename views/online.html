@@ -1,114 +1,88 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>Controle de Acesso</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+    <title>Controle de Acesso</title>
 </head>
 <body>
-<table width="100%">
-  <tr>
-    <th width="50%"><h1 class="text-center title-1">Biometrias</h1></th>
-    <th width="50%"><h1 class="text-center title-1">Veiculos</h1></th>
-  </tr>
-  <tr>
-    <td>
-      <table width="100%">
-        <tr>
-          <td rowspan="4" colspan="2"><img id="evento_biometria_foto" src=""/></td>
-        </tr>
-        <tr>
-          <td>Apartamento:</td>
-          <td><span id="evento_biometria_apartamento"></span></td>
-        </tr>
-        <tr>
-          <td>Nome:</td>
-          <td><span id="evento_biometria_nome"></span></td>
-        </tr>
-        <tr>
-          <td>Local:</td>
-          <td><span id="evento_biometria_local"></span></td>
-        </tr>
-      </table>
-      <hr/>
-      <table width="100%">
-        <tr>
-          <td>Biometrias associadas</td>
-        </tr>
-        <tr>
-          <td id="evento_biometria_associadas" style="display:inline;"></td>
-        </tr>
-      </table>
-      <hr/>
-        <!--
-      Últimas leituras
-      <table>
-        <tr>
-          <th>Apartamento</th>
-          <th>Nome</th>
-          <th>Horario</th>
-        </tr>
-      </table>
-      -->
-    </td>
-    <td>
-        <table width="100%">
-            <tr>
-                <td rowspan="6" colspan="2"><img id="evento_veiculo_foto" src=""/></td>
-            </tr>
-            <tr>
-                <td>Apartamento:</td>
-                <td><span id="evento_veiculo_apartamento"></span></td>
-            </tr>
-            <tr>
-                <td>Rotulo:</td>
-                <td><span id="evento_veiculo_rotulo"></span></td>
-            </tr>
-            <tr>
-                <td>Marca:</td>
-                <td><span id="evento_veiculo_marca"></span></td>
-            </tr>
-            <tr>
-                <td>Cor:</td>
-                <td><span id="evento_veiculo_cor"></span></td>
-            </tr>
-            <tr>
-                <td>Placa:</td>
-                <td><span id="evento_veiculo_placa"></span></td>
-            </tr>
-        </table>
-        <hr/>
-        <table width="100%">
-            <tr>
-                <td>Pessoas associadas</td>
-            </tr>
-            <tr>
-                <td id="evento_veiculo_biometria_associadas" style="display:inline;"></td>
-            </tr>
-        </table>
-        <hr/>
-        <table width="100%">
-            <tr>
-                <td>Veiculos associadas</td>
-            </tr>
-            <tr>
-                <td id="evento_veiculo_associados" style="display:inline;"></td>
-            </tr>
-        </table>
-        <!--
-      Últimas leituras
-      <table>
-        <tr>
-          <th>Apartamento</th>
-          <th>Nome</th>
-          <th>Horario</th>
-        </tr>
-      </table>
-      -->
-    </td>
-  </tr>
-</table>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">Online</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="/biometrias">Biometrias</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/veiculos">Veiculos</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/eventos">Eventos</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xl">
+            <div class="container">
+                <h1>Acesso biometrico</h1>
+                <div class="row">
+                    <div class="col-xl-5">
+                        <img id="evento_biometria_foto" src="">
+                    </div>
+                    <div class="col-xl-6">
+                        Apartamento:<span id="evento_biometria_apartamento"></span><br/>
+                        Nome:<span id="evento_biometria_nome"></span><br/>
+                        Local:<span id="evento_biometria_local"></span><br/>
+                        Data:<span id="evento_biometria_data_hora"></span><br/>
+                    </div>
+                </div>
+                <div class="row">
+                    <h1>Mesmo apartamento</h1>
+                </div>
+                <div class="row" id="evento_biometria_associadas">
+                </div>
+            </div>
+        </div>
+        <div class="col-xl">
+            <div class="container">
+                <h1>Acesso veiculo</h1>
+                <div class="row">
+                    <div class="col-xl-6">
+                        Apartamento:<span id="evento_veiculo_apartamento"></span><br/>
+                        Nome:<span id="evento_veiculo_rotulo"></span><br/>
+                        Marca:<span id="evento_veiculo_marca"></span><br/>
+                        Cor:<span id="evento_veiculo_cor"></span><br/>
+                        Placa:<span id="evento_veiculo_placa"></span><br/>
+                        Data:<span id="evento_veiculo_data_hora"></span><br/>
+                    </div>
+                </div>
+                <div class="row">
+                    <h1>Pessoas mesmo apartamento</h1>
+                </div>
+                <div class="row" id="evento_veiculo_biometria_associadas">
+                </div>
+                <div class="row">
+                    <h1>Veiculos mesmo apartamento</h1>
+                </div>
+                <div class="row" id="evento_veiculo_associados">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 <script>
 evento_biometria_id = -1;
 evento_veiculo_id = -1;
@@ -124,9 +98,10 @@ var find_biometria = function () {
         $("#evento_biometria_apartamento").text(evento_biometria.biometria.apartamento);
         $("#evento_biometria_nome").text(evento_biometria.biometria.nome);
         $("#evento_biometria_local").text(evento_biometria.local);
+        $("#evento_biometria_data_hora").text(evento_biometria.data_hora);
         var associadas = '';
         $.each(evento_biometria.biometrias_associadas, function(i, biometria_associada) {
-          associadas += '<div><img src="/images/'+biometria_associada._id+'.jpg"/><br/>'+biometria_associada.nome+'</div>'
+          associadas += '<div><img src="/images/'+biometria_associada._id+'.jpg"/><br/><span>'+biometria_associada.nome+'</span></div>'
         });
         $("#evento_biometria_associadas").html(associadas);
       }
@@ -149,6 +124,7 @@ var find_veiculo = function () {
         $("#evento_veiculo_marca").text(evento_veiculo.veiculo.marca);
         $("#evento_veiculo_cor").text(evento_veiculo.veiculo.cor);
         $("#evento_veiculo_placa").text(evento_veiculo.veiculo.placa);
+        $("#evento_veiculo_data_hora").text(evento_veiculo.data_hora);
         var associados = '';
         $.each(evento_veiculo.veiculos_associados, function(i, veiculo_associado) {
           associados += '<div>Marca: ' + veiculo_associado.marca + '<br/>Cor: ' + veiculo_associado.cor + '<br/>Placa: ' + veiculo_associado.placa + '<br/></div>'
@@ -156,7 +132,7 @@ var find_veiculo = function () {
         $("#evento_veiculo_associados").html(associados);
         var associadas = '';
         $.each(evento_veiculo.biometrias_associadas, function(i, biometria_associada) {
-          associadas += '<div><img src="/images/'+biometria_associada._id+'.jpg"/><br/>'+biometria_associada.nome+'</div>'
+          associadas += '<div><img src="/images/'+biometria_associada._id+'.jpg"/><br/><span>'+biometria_associada.nome+'</span></div>'
         });
         $("#evento_veiculo_biometria_associadas").html(associadas);
       }
