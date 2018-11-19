@@ -157,6 +157,24 @@ app.get('/biometrias', function (req, res) {
   }
 });
 
+app.get('/atualizar_fotos_biometrias', function (req, res) {
+  if (!db) {
+    initDb(function(err){});
+  }
+  if (db) {
+    Biometria.find({}, (err, biometrias) => {
+      if(biometria.foto){
+        var b = new Buffer(biometria.foto, 'hex');
+        fs.writeFile("public/images/" + biometria._id + ".jpg", b, function (err) {
+          if (err) {
+              return console.log(err);
+          }
+        });
+      }
+    });
+  }
+});
+
 app.post('/veiculo', function (req, res) {
   if (!db) {
     initDb(function(err){});
