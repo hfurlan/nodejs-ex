@@ -39,9 +39,12 @@
                         Marca:<span id="evento_veiculo_marca"></span><br/>
                         Cor:<span id="evento_veiculo_cor"></span><br/>
                         Placa:<span id="evento_veiculo_placa"></span><br/>
+                        Serial:<span id="evento_veiculo_serial"></span><br/>
+                    </div>
+                    <div class="col-xl-3">
                         Data:<span id="evento_veiculo_data_hora"></span><br/>
                         Bateria Fraca:<span id="evento_veiculo_bateria_fraca"></span><br/>
-                        Panico:<span id="evento_veiculo_panico"></span><br/>
+                        Panico:<span id="evento_veiculo_panico"></span><br/>                        
                     </div>
                 </div>
                 <div class="row">
@@ -103,6 +106,7 @@ var find_veiculo = function () {
         $("#evento_veiculo_marca").text(evento_veiculo.veiculo.marca);
         $("#evento_veiculo_cor").text(evento_veiculo.veiculo.cor);
         $("#evento_veiculo_placa").text(evento_veiculo.veiculo.placa);
+        $("#evento_veiculo_serial").text(evento_veiculo.veiculo._id);
         $("#evento_veiculo_bateria_fraca").text(evento_veiculo.bateria_fraca);
         $("#evento_veiculo_data_hora").text(evento_veiculo.data_hora);
         $("#evento_veiculo_panico").text(evento_veiculo.panico);
