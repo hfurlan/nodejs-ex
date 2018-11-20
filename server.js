@@ -163,14 +163,16 @@ app.get('/atualizar_fotos_biometrias', function (req, res) {
   }
   if (db) {
     Biometria.find({}, (err, biometrias) => {
-      if(biometria.foto){
-        var b = new Buffer(biometria.foto, 'hex');
-        fs.writeFile("public/images/" + biometria._id + ".jpg", b, function (err) {
-          if (err) {
-              return console.log(err);
-          }
-        });
-      }
+      biometrias.forEach(function(biometria) {
+        if(biometria.foto){
+          var b = new Buffer(biometria.foto, 'hex');
+          fs.writeFile("public/images/" + biometria._id + ".jpg", b, function (err) {
+            if (err) {
+                return console.log(err);
+            }
+          });
+        }
+      });        
     });
   }
 });
