@@ -11,7 +11,16 @@ biometria
 }
 
 /biometria?codigo=000123&nome=Hildebrando Furlan Neto&perfil=Morador&perfil_acesso=001&apartamento=271&foto=hex&observacoes=&data_cadastro=2018-01-01 00:00:00
-
+var biometria = {
+codigo = 123
+nome = Hildebrando
+perfil = Morador
+perfil_acesso = 001
+apartamento = 271
+foto = hex
+observacoes = Teste
+data_cadastro = 1426349294842
+data_envio = 1426349294842
 
 veiculo
 {
@@ -29,6 +38,15 @@ veiculo
 evento { tipo: "B", id: "000123", panico: "N", data_hora: "2018-01-01 00:00:00"}
 
 /evento?tipo=B&id=000123&panico=N
+
+var evento = {
+tipo = B
+codigo = 123
+local = 001
+panico = N
+bateria_fraca = N
+data_hora = 1426349294842
+
 
 &data_hora: "2018-01-01 00:00:00"
 

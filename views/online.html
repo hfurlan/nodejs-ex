@@ -5,6 +5,8 @@
 </head>
 <body>
 <% include partials/header %>
+<audio id="biometria_audio" src="/sounds/zapsplat_science_fiction_alarm_emergency_meltdown_17658.mp3" type="audio/mpeg"></audio>
+<audio id="veiculo_audio" src="/sounds/zapsplat_science_fiction_console_alarm_25112.mp3" type="audio/mpeg"></audio>
 <div class="container-fluid">
     <div class="row">
         <div class="col-xl">
@@ -38,13 +40,21 @@
                         Nome:<span id="evento_veiculo_rotulo"></span><br/>
                         Marca:<span id="evento_veiculo_marca"></span><br/>
                         Cor:<span id="evento_veiculo_cor"></span><br/>
-                        Placa:<span id="evento_veiculo_placa"></span><br/>
                         Serial:<span id="evento_veiculo_serial"></span><br/>
                     </div>
-                    <div class="col-xl-3">
-                        Data:<span id="evento_veiculo_data_hora"></span><br/>
-                        Bateria Fraca:<span id="evento_veiculo_bateria_fraca"></span><br/>
-                        Panico:<span id="evento_veiculo_panico"></span><br/>                        
+                    <div class="col-xl-6">
+                        <div class="row">
+                            <div class="col-xl-6" style="background-color: lightgray">
+                                <span id="evento_veiculo_placa" style="font-size: large"></span><br/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xl-6">
+                                Data:<span id="evento_veiculo_data_hora"></span><br/>
+                                Bateria Fraca:<span id="evento_veiculo_bateria_fraca"></span><br/>
+                                Panico:<span id="evento_veiculo_panico"></span><br/>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="row">
@@ -70,7 +80,7 @@ evento_veiculo_id = -1;
 var find_biometria = function () {
   $.ajax({
     type: "POST",
-    data: "evento_biometria_id="+evento_biometria_id,
+    data: "evento_biometria_id="+evento_biometria_id+"&evento_local="+$( "#evento_locais" ).val(),
     url: "online_biometria",
     success: function(evento_biometria,status) {
       if(evento_biometria._id){
@@ -86,8 +96,9 @@ var find_biometria = function () {
           associadas += '<div><img src="/images/'+biometria_associada._id+'.jpg"/><br/><span>'+biometria_associada.nome+'</span></div>'
         });
         $("#evento_biometria_associadas").html(associadas);
+        $("#biometria_audio")[0].play();
       }
-      setTimeout(find_biometria, 5000);
+      setTimeout(find_biometria, 2000);
     },
     dataType: 'json'
   });
@@ -120,8 +131,9 @@ var find_veiculo = function () {
           associadas += '<div><img src="/images/'+biometria_associada._id+'.jpg"/><br/><span>'+biometria_associada.nome+'</span></div>'
         });
         $("#evento_veiculo_biometria_associadas").html(associadas);
+        $("#veiculo_audio")[0].play();
       }
-      setTimeout(find_veiculo, 5000);
+      setTimeout(find_veiculo, 3000);
     },
     dataType: 'json'
   });

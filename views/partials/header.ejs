@@ -18,5 +18,19 @@
                 <a class="nav-link" href="/atualizar_fotos_biometrias">Atualizar-Fotos</a>
             </li>
         </ul>
+        <form class="form-inline">
+            <select class="form-control mr-sm-2" id="evento_locais">
+                <option value="">--Todos--</option>
+                <%
+                if (locals.evento_locais) {
+                evento_locais.forEach(function(local){
+                %>
+                    <option value="<%= local%>"><%= local%></option>
+                <%
+                })
+                }
+                %>
+            </select>
+        </form>
     </div>
 </nav>

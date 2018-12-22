@@ -123,6 +123,27 @@ app.get('/login', function (req, res) {
   res.render('login.html');
 });
 
+app.get('/carga', function (req, res) {
+  if (!db) {
+    initDb(function(err){});
+  }
+  if (db) {
+    var biometria = { _id: '123', nome: 'Teste 123', perfil: 'Morador', perfil_acesso: '000', apartamento: '111', data_cadastro: new Date(), data_envio: new Date() };
+    db.collection("biometrias").update({ _id : biometria._id }, biometria, {upsert: true})
+    var biometria = { _id: '124', nome: 'Teste 124', perfil: 'Morador', perfil_acesso: '000', apartamento: '111', data_cadastro: new Date(), data_envio: new Date() };
+    db.collection("biometrias").update({ _id : biometria._id }, biometria, {upsert: true})
+    var evento = { tipo: 'B', codigo: '123', local: '001', panico: 'N', bateria_fraca: 'N', data_hora: new Date() };
+    db.collection("eventos").insertOne(evento);
+
+    var veiculo = { _id: '23467', marca: 'HONDA', cor: 'PRATA', placa: 'EJQ7229', apartamento: '21', rotulo: 'Rotulo', data_cadastro: new Date(), data_envio: new Date() };
+    db.collection("veiculos").update({ _id : veiculo._id }, veiculo, {upsert: true})
+    var evento = { tipo: 'L', serial: '23467', local: '001', panico: 'N', bateria_fraca: 'N', data_hora: new Date() };
+    db.collection("eventos").insertOne(evento);
+
+    res.render('index.html');
+  }
+});
+
 app.post('/biometria', function (req, res) {
   if (!db) {
     initDb(function(err){});
@@ -222,7 +243,9 @@ app.get('/eventos', function (req, res) {
 });
 
 app.get('/online', function (req, res) {
-  res.render('online.html')
+  Evento.find({}).distinct('local', function(err, evento_locais) {
+    res.render('online.html', { evento_locais: evento_locais})
+  });
 });
 
 app.post('/online_biometria', function (req, res) {
@@ -231,9 +254,18 @@ app.post('/online_biometria', function (req, res) {
   }
   if (db) {
     console.log('evento_biometria_id:%s', req.body.evento_biometria_id);
-    Evento.findOne({ tipo: 'B', codigo: { $ne: null }, codigo: { $ne: '' }, _id: { $ne: req.body.evento_biometria_id } }, { foto: 0 }, { sort: { data_hora: -1 } }, (err, evento_biometria) => {
+    console.log('evento_local:%s', req.body.evento_local);
+    search = { tipo: 'B', codigo: { $ne: null }, codigo: { $ne: '' }, _id: { $ne: req.body.evento_biometria_id } }
+    if (req.body.evento_local !== '') {
+      search = { tipo: 'B', codigo: { $ne: null }, codigo: { $ne: '' }, _id: { $ne: req.body.evento_biometria_id }, local: req.body.evento_local }
+    }
+    Evento.findOne(search, { foto: 0 }, { sort: { data_hora: -1 } }, (err, evento_biometria) => {
       if (err) throw err;
-      if (evento_biometria == null) return;
+      if (evento_biometria == null || evento_biometria._id === req.body.evento_biometria_id) {
+        res.setHeader('Content-Type', 'application/json');
+        res.send({});
+        return
+      }
 
       // Buscar a biometria associada ao evento
       Biometria.findOne({ _id: evento_biometria.codigo}, { foto: 0 }, (err, biometria) => {
@@ -263,7 +295,11 @@ app.post('/online_veiculo', function (req, res) {
     console.log('evento_veiculo_id:%s', req.body.evento_veiculo_id);
     Evento.findOne({ tipo: 'L', serial: { $ne: null }, serial: { $ne: '' }, _id: { $ne: req.body.evento_veiculo_id } }, null, { sort: { data_hora: -1 } }, (err, evento_veiculo) => {
       if (err) throw err;
-      if (evento_veiculo == null) return;
+      if (evento_veiculo == null || evento_veiculo._id === req.body.evento_veiculo_id) {
+        res.setHeader('Content-Type', 'application/json');
+        res.send({});
+        return
+      }
 
       // Buscar o veiculo associada ao evento
       Veiculo.findOne({ _id: evento_veiculo.serial}, (err, veiculo) => {
