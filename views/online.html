@@ -81,7 +81,7 @@ var find_biometria = function () {
   $.ajax({
     type: "POST",
     data: "evento_biometria_id="+evento_biometria_id+"&evento_local="+$( "#evento_locais" ).val(),
-    url: "online_biometria",
+    url: "/online/online_biometria",
     success: function(evento_biometria,status) {
       if(evento_biometria._id){
         evento_biometria_id = evento_biometria._id;
@@ -98,7 +98,7 @@ var find_biometria = function () {
         $("#evento_biometria_associadas").html(associadas);
         $("#biometria_audio")[0].play();
       }
-      setTimeout(find_biometria, 2000);
+      setTimeout(find_biometria, 1000);
     },
     dataType: 'json'
   });
@@ -107,7 +107,7 @@ var find_veiculo = function () {
   $.ajax({
     type: "POST",
     data: "evento_veiculo_id="+evento_veiculo_id,
-    url: "online_veiculo",
+    url: "/online/online_veiculo",
     success: function(evento_veiculo,status) {
       if(evento_veiculo._id){
         evento_veiculo_id = evento_veiculo._id;
@@ -133,7 +133,7 @@ var find_veiculo = function () {
         $("#evento_veiculo_biometria_associadas").html(associadas);
         $("#veiculo_audio")[0].play();
       }
-      setTimeout(find_veiculo, 3000);
+      setTimeout(find_veiculo, 1000);
     },
     dataType: 'json'
   });

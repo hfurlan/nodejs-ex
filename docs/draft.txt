@@ -67,7 +67,7 @@ docker run --link nodejs-ex_mongo_1:mongo --net nodejs-ex_default -p 8081:8081 m
 
 http://localhost:8081
 
---Na pagina HTML, para mostrar o condteudo em imagem do que vem em HEXSTRING
+--Na pagina HTML, para mostrar o conteudo em imagem do que vem em HEXSTRING
 
 https://www.codeproject.com/Questions/1110737/How-to-display-image-from-binary-data-in-javascrip
 

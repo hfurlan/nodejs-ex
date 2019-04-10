@@ -15,7 +15,10 @@
                 <a class="nav-link" href="/eventos">Eventos</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/atualizar_fotos_biometrias">Atualizar-Fotos</a>
+                <a class="nav-link" href="/usuarios">Usuarios</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/logout">Logout</a>
             </li>
         </ul>
         <form class="form-inline">
@@ -34,3 +37,12 @@
         </form>
     </div>
 </nav>
+<% if (locals.error_msg) { %>
+    <b><%= error_msg %></b>
+<% } %>
+<% if (locals.info_msg) { %>
+    <b><%= info_msg %></b>
+<% } %>
+<% if (locals.warn_msg) { %>
+    <b><%= warn_msg %></b>
+<% } %>

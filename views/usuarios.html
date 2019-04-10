@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <% include partials/head %>
+</head>
+<body>
+<% include partials/header %>
+<h1 class="text-center title-1">Lista de Usuarios</h1>
+<table>
+  <tr>
+    <th><a href="usuarios?order=_id">#</a></th>
+    <th><a href="usuarios?order=login">Login</a></th>
+    <th><a href="usuarios?order=senha">Senha</a></th>
+    <th>&nbsp;</th>
+  </tr>
+  <% usuarios.forEach(function(usuario){ %>
+  <tr>
+    <td><%= usuario._id %></td>
+    <td><%= usuario.login %></td>
+    <td><%= usuario.senha %></td>
+    <td><a href="/usuarios/editar?id=<%= usuario._id %>">Editar</a></td>
+  </tr>
+  <%})%>
+  <tr>
+    <td colspan="3"><a href="/usuarios/novo">Novo</a></td>
+  </tr>
+</table>
+</body>
+</html>
