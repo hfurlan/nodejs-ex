@@ -14,8 +14,16 @@ The out-of-box server.js use a host called "mongo" to connect to MongoDB server.
 
 The URLs are so simples that I can´t even call it an API. You must send the data with a GET request, and with params on the URL string. Follow the examples:
 
-/biometria?codigo=000123&nome=Hildebrando Furlan Neto&perfil=Morador&perfil_acesso=001&apartamento=271&foto=hex&observacoes=&data_cadastro=2018-01-01 00:00:00
+### biometria
 
-/veiculo?serial=206A2B9&marca=Hyundai&cor=cinza&placa=ABC1234&foto=hex&rotulo=Hildebrando Furlan Neto&data_cadastro=2018-01-01 00:00:00
+curl -d "codigo=000123&nome=Nome&perfil=001&perfil_acesso=001&apartamento=271&data_cadastro=1555047486537&data_envio=1555047486537" -X POST http://localhost:8080/biometrias/salvar
 
-/evento?tipo=B&id=000123&panico=N
+### veiculo
+
+curl -d "serial=ABCDEFG&marca=HONDA&cor=PRATA&placa=EJQ2449&apartamento=271&rotulo=TESTEROTULO&data_cadastro=1555047486537&data_envio=1555047486537" -X POST http://localhost:8080/veiculos/salvar
+
+### evento biometria
+curl -d "tipo=B&codigo=000123&local=001&panico=N&bateria_fraca=N&data_hora=1555047486537" -X POST http://localhost:8080/eventos/salvar
+
+### evento veiculo
+curl -d "tipo=V&serial=ABCDEFG&local=001&panico=N&bateria_fraca=N&data_hora=1555047486537" -X POST http://localhost:8080/eventos/salvar

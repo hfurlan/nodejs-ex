@@ -4,7 +4,7 @@ var router = express.Router();
 const Veiculo = require('../models/veiculo.models.js');
 const Evento = require('../models/evento.models.js');
 
-router.post('/veiculo', function (req, res) {
+router.post('/salvar', function (req, res) {
   var veiculo = { _id: req.body.serial, marca: req.body.marca, cor: req.body.cor, placa: req.body.placa, apartamento: req.body.apartamento, rotulo: req.body.rotulo, data_cadastro: new Date(parseInt(req.body.data_cadastro)), data_envio: new Date(parseInt(req.body.data_envio)) };
   global.db.collection("veiculos").update({ _id : veiculo._id }, veiculo, {upsert: true})
   res.send();
