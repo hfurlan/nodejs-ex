@@ -1,0 +1,54 @@
+<!doctype html>
+<html ng-app="onlineVeiculos">
+<head>
+    <% include partials/head %>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.8/angular.min.js"></script>
+    <script src="/js/online_veiculos.js"></script>
+</head>
+<body>
+<% include partials/header %>
+<audio id="veiculo_audio" src="/sounds/Car_Horn_Honk_1-SoundBible.com-248048021.mp3" type="audio/mpeg"></audio>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xl">
+            <div class="container" ng-controller="OnlineVeiculosController as controller">
+                <h1>Acesso veiculo</h1>
+                <div class="row">
+                    <div class="col-xl-4">
+                        Apartamento: {{controller.veiculo.apartamento}}<br/>
+                        Nome: {{controller.veiculo.rotulo}}<br/>
+                        Marca: {{controller.veiculo.marca}}<br/>
+                        Cor: {{controller.veiculo.cor}}<br/>
+                        Serial: {{controller.veiculo._id}}<br/>
+                    </div>
+                    <div class="col-xl-4" style="background-color: lightgray; font-size: 72px; font-weight: bold">
+                        {{controller.veiculo.placa}}
+                    </div>
+                    <div class="col-xl-4">
+                        Data: {{controller.data_hora}}<br/>
+                        Bateria Fraca: {{controller.bateriaFraca}}<br/>
+                        Panico: {{controller.panico}}<br/>
+                    </div>
+                </div>
+                <div class="row">
+                    <h1>Pessoas mesmo apartamento</h1>
+                </div>
+                <div class="row" id="evento_veiculo_biometria_associadas">
+                    <div ng-repeat="pessoaMesmoApartamento in controller.pessoasMesmoApartamento">
+                        <div class="col-xl-2"><img src="/images/{{pessoaMesmoApartamento._id}}.jpg"/><br/><span>{{pessoaMesmoApartamento.nome}}</span></div>
+                    </div>
+                </div>
+                <div class="row">
+                    <h1>Veiculos mesmo apartamento</h1>
+                </div>
+                <div class="row" id="evento_veiculo_associados">
+                    <div ng-repeat="veiculoMesmoApartamento in controller.veiculosMesmoApartamento">
+                        <div class="col-xl-2">Marca: {{veiculoMesmoApartamento.marca}}<br/>Cor: {{veiculoMesmoApartamento.cor}}<br/>Placa: {{veiculoMesmoApartamento.placa}}<br/></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

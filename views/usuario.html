@@ -7,15 +7,15 @@
 <% include partials/header %>
 <h1 class="text-center title-1">Usuario</h1>
 <form name="form" method="POST" action="/usuarios/salvar">
-  <input type="hidden" name="id" value="<% if (locals.usuario) { out.print(locals.usuario.id) } %>"/>
+  <input type="hidden" name="id" value="<% if (locals.usuario) { %><%= locals.usuario.id %><% } %>"/>
   <table>
     <tr>
       <td>Login</td>
-      <td><input type="text" name="login" value="<% if (locals.usuario) { out.print(locals.usuario.login) } %>"/></td>
+      <td><input type="text" name="login" value="<% if (locals.usuario) { %><%= locals.usuario.login %><% } %>"/></td>
     </tr>
     <tr>
       <td>Senha</td>
-      <td><input type="text" name="senha" value="<% if (locals.usuario) { out.print(locals.usuario.senha) } %>"/></td>
+      <td><input type="text" name="senha" value="<% if (locals.usuario) { %><%= locals.usuario.senha %><% } %>"/></td>
     </tr>
     <tr>
       <td colspan="2"><input type="submit"></td>

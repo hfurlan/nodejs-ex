@@ -18,7 +18,7 @@
     <td><%= usuario._id %></td>
     <td><%= usuario.login %></td>
     <td><%= usuario.senha %></td>
-    <td><a href="/usuarios/editar?id=<%= usuario._id %>">Editar</a></td>
+    <td><a href="/usuarios/editar?id=<%= usuario._id %>">Editar</a><a href="/usuarios/remover?id=<%= usuario._id %>">Remover</a></td>
   </tr>
   <%})%>
   <tr>

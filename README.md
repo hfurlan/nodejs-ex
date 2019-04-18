@@ -10,6 +10,13 @@ Run using MongoDB, is necessary to setup an Mongo DB Server ou start everything 
 
 The out-of-box server.js use a host called "mongo" to connect to MongoDB server. So, if you are using the default connections properties, you must include de host "mongo" on your environment (linux = /etc/host , windows = c:\Windows\system32\drivers\etc\hosts)
 
+## hot deploy
+
+´´´
+$ npm install nodemon -g
+$ nodemon app.js
+´´´
+
 ## The REST Api
 
 The URLs are so simples that I can´t even call it an API. You must send the data with a GET request, and with params on the URL string. Follow the examples:
@@ -26,4 +33,4 @@ curl -d "serial=ABCDEFG&marca=HONDA&cor=PRATA&placa=EJQ2449&apartamento=271&rotu
 curl -d "tipo=B&codigo=000123&local=001&panico=N&bateria_fraca=N&data_hora=1555047486537" -X POST http://localhost:8080/eventos/salvar
 
 ### evento veiculo
-curl -d "tipo=V&serial=ABCDEFG&local=001&panico=N&bateria_fraca=N&data_hora=1555047486537" -X POST http://localhost:8080/eventos/salvar
+curl -d "tipo=L&serial=ABCDEFG&local=001&panico=N&bateria_fraca=N&data_hora=1555047489900" -X POST http://localhost:8080/eventos/salvar

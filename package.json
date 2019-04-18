@@ -4,6 +4,7 @@
   "description": "Simple Web Access Control",
   "main": "server.js",
   "dependencies": {
+    "angular": "^1.7.8",
     "body-parser": "^1.18.3",
     "chai": "^3.5.0",
     "chai-http": "^2.0.1",
