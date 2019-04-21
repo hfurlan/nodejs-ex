@@ -16,6 +16,7 @@
     <th><a href="veiculos?order=cor">Cor</a></th>
     <th><a href="veiculos?order=placa">Placa</a></th>
     <th><a href="veiculos?order=rotulo">Rotulo</a></th>
+    <th><a href="veiculos?order=ativo">Ativo</a></th>
   </tr>
   <% veiculos.forEach(function(veiculo){ %>
   <tr>
@@ -25,6 +26,7 @@
     <td><%= veiculo.cor %></td>
     <td><%= veiculo.placa %></td>
     <td><%= veiculo.rotulo %></td>
+    <td><%= veiculo.ativo %></td>
   </tr>
   <%})%>
 </table>

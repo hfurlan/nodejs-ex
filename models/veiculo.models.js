@@ -7,6 +7,7 @@ var VeiculoSchema = new mongoose.Schema({
     placa: String,
     apartamento: String,
     rotulo: String,
+    ativo: String, 
     data_cadastro: Date,
     data_envio: Date
   });

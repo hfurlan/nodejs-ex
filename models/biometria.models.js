@@ -8,6 +8,7 @@ var BiometriaSchema = new mongoose.Schema({
     apartamento: String,
     foto: String,
     observacoes: String,
+    ativo: String,
     data_cadastro: Date,
     data_envio: Date
   });

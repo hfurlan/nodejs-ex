@@ -33,7 +33,7 @@ router.post('/online_biometria', function (req, res) {
       evento.biometria = biometria;
 
       // Buscar biometrias do mesmo apartamento
-      Biometria.find({ $query: { apartamento: biometria.apartamento, _id: { $ne: evento_biometria.codigo } } }, { foto: 0 }, (err, biometrias_associadas) => {
+      Biometria.find({ $query: { apartamento: biometria.apartamento, ativo: 'S', _id: { $ne: evento_biometria.codigo } } }, { foto: 0 }, (err, biometrias_associadas) => {
         evento.biometrias_associadas = biometrias_associadas;
 
         // Retornar o evento populado com todas as informacoes necessarias para a tela
@@ -62,11 +62,11 @@ router.post('/online_veiculo', function (req, res) {
       evento.veiculo = veiculo;
 
       // Buscar veiculos do mesmo apartamento
-      Veiculo.find({ $query: { apartamento: veiculo.apartamento, _id: { $ne: evento_veiculo.serial } } }, (err, veiculos_associados) => {
+      Veiculo.find({ $query: { apartamento: veiculo.apartamento, ativo: 'S', _id: { $ne: evento_veiculo.serial } } }, (err, veiculos_associados) => {
         evento.veiculos_associados = veiculos_associados;
 
         // Buscar biometrias do mesmo apartamento
-        Biometria.find({ $query: { apartamento: veiculo.apartamento } }, { foto: 0 }, (err, biometrias_associadas) => {
+        Biometria.find({ $query: { apartamento: veiculo.apartamento, ativo: 'S' } }, { foto: 0 }, (err, biometrias_associadas) => {
           evento.biometrias_associadas = biometrias_associadas;
 
           // Retornar o evento populado com todas as informacoes necessarias para a tela

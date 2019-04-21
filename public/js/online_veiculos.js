@@ -26,7 +26,7 @@ angular.module('onlineVeiculos', [])
         $scope.playAudio = function() {
           var audio = new Audio('/sounds/Car_Horn_Honk_1-SoundBible.com-248048021.mp3');
           audio.play();
-        };        
+        }();
       }
     });
     
