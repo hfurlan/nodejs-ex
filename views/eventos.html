@@ -6,6 +6,7 @@
 <body>
 <% include partials/header %>
 <h1 class="text-center title-1"> Lista dos ultimos eventos </h1>
+<form action="eventos" method="POST">
 <table>
   <tr>
     <th>#</th>
@@ -15,6 +16,17 @@
     <th>Panico</th>
     <th>Bateria Fraca</th>
     <th>Data</th>
+    <th></th>
+  </tr>
+  <tr>
+    <th></th>
+    <th><input type="text" name="codigo"/>/<input type="text" name="serial"/></th>
+    <th><input type="text" name="tipo" size="1"/></th>
+    <th><input type="text" name="local"/></th>
+    <th><input type="text" name="panico" size="1"/></th>
+    <th><input type="text" name="bateria_fraca" size="1"/></th>
+    <th>Data</th>
+    <th><input type="submit"/></th>
   </tr>
   <% eventos.forEach(function(evento){ %>
   <tr>
@@ -24,9 +36,10 @@
     <td><%= evento.local %></td>
     <td><%= evento.panico %></td>
     <td><%= evento.bateria_fraca %></td>
-    <td><%= evento.data_hora %></td>
+    <td><%= evento.data_hora.toISOString() %></td>
   </tr>
   <%})%>
 </table>
+</form>
 </body>
 </html>

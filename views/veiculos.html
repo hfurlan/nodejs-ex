@@ -8,6 +8,7 @@
 <h1 class="text-center title-1"> Lista de Veiculos </h1>
 <a href="/veiculos">Veiculos</a>
 <a href="/veiculos/expirados">Veiculos Expirados</a>
+<form action="veiculos" method="POST">
 <table>
   <tr>
     <th><a href="veiculos?order=_id">#</a></th>
@@ -17,6 +18,17 @@
     <th><a href="veiculos?order=placa">Placa</a></th>
     <th><a href="veiculos?order=rotulo">Rotulo</a></th>
     <th><a href="veiculos?order=ativo">Ativo</a></th>
+    <th></th>
+  </tr>
+  <tr>
+    <th></th>
+    <th><input type="text" name="apartamento" size="5"/></th>
+    <th><input type="text" name="marca"/></th>
+    <th><input type="text" name="cor"/></th>
+    <th><input type="text" name="placa"/></th>
+    <th><input type="text" name="rotulo"/></th>
+    <th><input type="text" name="ativo" size="1"/></th>
+    <th><input type="submit"/></th>
   </tr>
   <% veiculos.forEach(function(veiculo){ %>
   <tr>
@@ -30,5 +42,6 @@
   </tr>
   <%})%>
 </table>
+</form>
 </body>
 </html>

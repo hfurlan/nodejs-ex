@@ -15,4 +15,20 @@ router.get('/', function (req, res) {
   }).limit(50);
 });
 
+router.post('/', function (req, res) {
+  var query = Evento.find().sort( { data_hora: -1 }).limit(50);
+
+  for (var fieldName in req.body) {
+    if(req.body.hasOwnProperty(fieldName)) {
+      if(req.body[fieldName]) {
+        query.where(fieldName).equals(req.body[fieldName]);
+      }
+    }
+  }
+
+  query.exec(function(err, eventos){
+    res.render('eventos.html', { eventos: eventos})
+  });
+});
+
 module.exports = router;

@@ -6,7 +6,8 @@
 <body>
 <% include partials/header %>
 <h1 class="text-center title-1">Lista de Biometrias</h1>
-<a href="/biometrias/atualizar_fotos_biometrias">Atualizar-Fotos</a>
+<!--<a href="/biometrias/atualizar_fotos_biometrias">Atualizar-Fotos</a>-->
+<form action="biometrias" method="POST">
 <table>
   <tr>
     <th><a href="biometrias?order=_id">#</a></th>
@@ -16,6 +17,14 @@
     <th><a href="biometrias?order=ativo">Ativo</a></th>
     <th>Imagem</th>
   </tr>
+  <tr>
+    <th></th>
+    <th><input type="text" name="apartamento" size="5"/></th>
+    <th><input type="text" name="nome"/></th>
+    <th><input type="text" name="perfil"/></th>
+    <th><input type="text" name="ativo" size="1"/></th>
+    <th><input type="submit"/></th>
+  </tr>  
   <% biometrias.forEach(function(biometria){ %>
   <tr>
     <td><%= biometria._id %></td>
@@ -27,5 +36,6 @@
   </tr>
   <%})%>
 </table>
+</form>
 </body>
 </html>

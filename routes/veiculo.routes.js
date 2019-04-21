@@ -25,22 +25,51 @@ router.get('/', function (req, res) {
   });
 });
 
+router.post('/', function (req, res) {
+  var query = Veiculo.find().sort( { apartamento: 1 }).limit(50);
+
+  for (var fieldName in req.body) {
+    if(req.body.hasOwnProperty(fieldName)) {
+      if(req.body[fieldName]) {
+        query.where(fieldName).equals(req.body[fieldName]);
+      }
+    }
+  }
+
+  query.exec(function(err, veiculos){
+    res.render('veiculos.html', { veiculos: veiculos})
+  });
+});
+
 // procurar veiculo que nao tenha evento a mais de 90 dias
 router.get('/expirados', function (req, res) {
   var d = new Date();
   d.setDate(d.getDate() - 90); //minus 90 days
   console.log(`Procurando veiculos sem evento posteriores a data ${d}`);
   var veiculos_expirados = [];
-  Veiculo.find({}, null, { sort: { apartamento : 1 } }, (err, veiculos) => {
-    veiculos.forEach(function(v){
-      Evento.find({serial: v._id, data_hora: { $gt: d } }, null, {}, (err, eventos) => {
-        if (eventos.length == 0) {
-          veiculos_expirados.push(v);
-        }
-      });
-    });
+  Veiculo.find({ativo: 'S'}, null, { sort: { apartamento : 1 } }, async function (err, veiculos) {
+    console.log(`Veiculos encontrados = ${veiculos.length}`);
+    for (i = 0; i < veiculos.length; i++) { 
+      var veiculo = veiculos[i];
+      console.log(`Veiculo ${veiculo._id}`);
+      var expirado = await isExpirado(veiculo._id, d);
+      console.log(`Veiculo expirado ${expirado}`);
+      if (expirado) {
+        veiculos_expirados.push(veiculo);
+      }  
+    }
     res.render('veiculos.html', { veiculos: veiculos_expirados});
   });
 });
+
+function isExpirado(id, dataLimite){
+  var promise = new Promise(function(resolve, reject) { 
+    Evento.find({ serial: id, tipo: 'L', data_hora: { $lt: dataLimite }, data_hora: { $not: { $gt: dataLimite } } }, null, {}, (err, eventos) => {
+      console.log(`Eventos do ${id} = ${eventos.length}`);
+      resolve(eventos.length == 0);
+    });  
+  });
+  return promise;
+}
 
 module.exports = router;

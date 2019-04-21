@@ -28,11 +28,23 @@ router.post('/desativar_outros', function (req, res) {
 });
 
 router.get('/', function (req, res) {
-  fieldOrder = '_id';
-  if(req.query.order){
-    fieldOrder = req.query.order;
-  }
   Biometria.find({}, null, { sort: { apartamento : 1 } }, (err, biometrias) => {
+    res.render('biometrias.html', { biometrias: biometrias})
+  });
+});
+
+router.post('/', function (req, res) {
+  var query = Biometria.find().sort( { apartamento: 1 }).limit(50);
+
+  for (var fieldName in req.body) {
+    if(req.body.hasOwnProperty(fieldName)) {
+      if(req.body[fieldName]) {
+        query.where(fieldName).equals(req.body[fieldName]);
+      }
+    }
+  }
+
+  query.exec(function(err, biometrias){
     res.render('biometrias.html', { biometrias: biometrias})
   });
 });
