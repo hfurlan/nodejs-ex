@@ -39,6 +39,7 @@ app.use('/veiculos', require('./routes/veiculo.routes.js'));
 app.use('/eventos', require('./routes/evento.routes.js'));
 app.use('/online', require('./routes/online.routes.js'));
 app.use('/online_veiculos', require('./routes/online_veiculos.routes.js'));
+app.use('/estatisticas', require('./routes/estatisticas.routes.js'));
 
 // error handling
 app.use(function(err, req, res, next){

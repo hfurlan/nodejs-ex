@@ -39,14 +39,14 @@ router.get('/logout', function(req, res, next) {
 });
 
 router.get('/carga', function (req, res) {
-  var biometria = { _id: '123', nome: 'Teste 123', perfil: 'Morador', perfil_acesso: '000', apartamento: '111', data_cadastro: new Date(), data_envio: new Date() };
+  var biometria = { _id: '123', nome: 'Teste 123', perfil: 'Morador', perfil_acesso: '000', apartamento: '111', ativo: 'S', data_cadastro: new Date(), data_envio: new Date() };
   db.collection("biometrias").update({ _id : biometria._id }, biometria, {upsert: true})
-  var biometria = { _id: '124', nome: 'Teste 124', perfil: 'Morador', perfil_acesso: '000', apartamento: '111', data_cadastro: new Date(), data_envio: new Date() };
+  var biometria = { _id: '124', nome: 'Teste 124', perfil: 'Morador', perfil_acesso: '000', apartamento: '111', ativo: 'S', data_cadastro: new Date(), data_envio: new Date() };
   db.collection("biometrias").update({ _id : biometria._id }, biometria, {upsert: true})
   var evento = { tipo: 'B', codigo: '123', local: '001', panico: 'N', bateria_fraca: 'N', data_hora: new Date() };
   db.collection("eventos").insertOne(evento);
 
-  var veiculo = { _id: '23467', marca: 'HONDA', cor: 'PRATA', placa: 'EJQ7229', apartamento: '21', rotulo: 'Rotulo', data_cadastro: new Date(), data_envio: new Date() };
+  var veiculo = { _id: '23467', marca: 'HONDA', cor: 'PRATA', placa: 'EJQ7229', apartamento: '21', rotulo: 'Rotulo', ativo: 'S', data_cadastro: new Date(), data_envio: new Date() };
   db.collection("veiculos").update({ _id : veiculo._id }, veiculo, {upsert: true})
   var evento = { tipo: 'L', serial: '23467', local: '001', panico: 'N', bateria_fraca: 'N', data_hora: new Date() };
   db.collection("eventos").insertOne(evento);

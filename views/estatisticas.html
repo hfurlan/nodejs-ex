@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <% include partials/head %>
+</head>
+<body>
+<% include partials/header %>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-xl">
+      <h1 class="text-center title-1"> Total Veiculos </h1>
+      <table> 
+        <tr>
+          <th>Situacao</th>
+          <th>Qtd</th>
+        </tr>
+        <% veiculos_situacao.forEach(function(veiculo_situacao){ %>
+          <tr>
+            <td><%= veiculo_situacao._id %></td>
+            <td><%= veiculo_situacao.total %></td>
+          </tr>
+        <%})%>
+      </table>
+    </div>
+    <div class="col-xl">
+      <h1 class="text-center title-1"> Total Biometrias </h1>
+      <table> 
+        <tr>
+          <th>Situacao</th>
+          <th>Qtd</th>
+        </tr>
+        <% biometrias_situacao.forEach(function(biometria_situacao){ %>
+          <tr>
+            <td><%= biometria_situacao._id %></td>
+            <td><%= biometria_situacao.total %></td>
+          </tr>
+        <%})%>
+      </table>
+    </div>  
+    <div class="col-xl">
+      <h1 class="text-center title-1"> Total Eventos por Local </h1>
+      <table> 
+        <tr>
+          <th>Local</th>
+          <th>Qtd</th>
+        </tr>
+        <% eventos_local.forEach(function(evento_local){ %>
+          <tr>
+            <td><%= evento_local._id %></td>
+            <td><%= evento_local.total %></td>
+          </tr>
+        <%})%>
+      </table>
+    </div>    
+  </div>
+  <div class="row">
+    <div class="col-xl">
+      <form action="estatisticas" method="POST">
+      <h1 class="text-center title-1"> Quantidade Acesso </h1>
+      <table> 
+        <tr>
+          <th>Local</th>
+          <th><input type="text" name="local" size="3"/></th>
+          <th>Data Inicio</th>
+          <th><input type="text" name="data_hora_inicio" size="10"/></th>
+          <th>Data Fim</th>
+          <th><input type="text" name="data_hora_fim" size="10"/></th>
+          <th><input type="submit" /></th>
+        </tr>
+      </table>
+      <div id="chart_div"></div>
+      </form>
+    </div>
+  </div>
+</div>
+<script lang="javascript">
+google.charts.load('current', {packages: ['corechart', 'bar']});
+google.charts.setOnLoadCallback(drawBasic);
+
+function drawBasic() {
+
+      var data = new google.visualization.DataTable();
+      data.addColumn('timeofday', 'Time of Day');
+      data.addColumn('number', 'Motivation Level');
+
+      data.addRows([
+      <% 
+      for(var i = 0; i < eventos_timeline.length; i++){ 
+        var timeline = eventos_timeline[i];
+      %>
+        [{v: [<%= i %>, 0, 0], f: '<%= i %> am'}, <%= timeline %>],
+      <%}%>
+      ]);
+        
+//      data.addRows([
+//        [{v: [8, 0, 0], f: '8 am'}, 1],
+//        [{v: [9, 0, 0], f: '9 am'}, 2],
+//        [{v: [10, 0, 0], f:'10 am'}, 3],
+//        [{v: [11, 0, 0], f: '11 am'}, 4],
+//        [{v: [12, 0, 0], f: '12 pm'}, 5],
+//        [{v: [13, 0, 0], f: '1 pm'}, 6],
+//        [{v: [14, 0, 0], f: '2 pm'}, 7],
+//        [{v: [15, 0, 0], f: '3 pm'}, 8],
+//        [{v: [16, 0, 0], f: '4 pm'}, 9],
+//        [{v: [17, 0, 0], f: '5 pm'}, 10],
+
+      var options = {
+        title: 'Quantidade de acessos',
+        hAxis: {
+          title: 'Hora do dia',
+          format: 'h:mm a',
+          viewWindow: {
+            min: [0, 0, 0],
+            max: [23, 59, 59]
+          }
+        },
+        vAxis: {
+          title: 'Quantidade'
+        }
+      };
+
+      var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+      chart.draw(data, options);
+    }
+</script>
+</body>
+</html>

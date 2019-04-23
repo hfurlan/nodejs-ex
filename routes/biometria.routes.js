@@ -30,7 +30,7 @@ router.post('/desativar_outros', function (req, res) {
 router.get('/', function (req, res) {
   Biometria.find({}, null, { sort: { apartamento : 1 } }, (err, biometrias) => {
     res.render('biometrias.html', { biometrias: biometrias})
-  });
+  }).limit(50);
 });
 
 router.post('/', function (req, res) {

@@ -22,7 +22,7 @@ router.post('/desativar_outros', function (req, res) {
 router.get('/', function (req, res) {
   Veiculo.find({}, null, { sort: { apartamento : 1 } }, (err, veiculos) => {
     res.render('veiculos.html', { veiculos: veiculos})
-  });
+  }).limit(50);
 });
 
 router.post('/', function (req, res) {
