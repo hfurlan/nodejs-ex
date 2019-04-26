@@ -20,7 +20,9 @@ angular.module('onlineVeiculos', [])
         controller.veiculo = evento_veiculo.veiculo;
         controller.data_hora = evento_veiculo.data_hora;
         controller.panico = evento_veiculo.panico;
+        controller.panicoCor = evento_veiculo.panico == 'N' ? 'green' : 'red';
         controller.bateriaFraca = evento_veiculo.bateria_fraca;
+        controller.bateriaFracaCor = evento_veiculo.bateria_fraca == 'N' ? 'green' : 'red';
         controller.veiculosMesmoApartamento = evento_veiculo.veiculos_associados;
         controller.pessoasMesmoApartamento = evento_veiculo.biometrias_associadas;
         $scope.playAudio = function() {

@@ -14,20 +14,31 @@ router.get('/', async function (req, res) {
     veiculos_situacao: veiculos_situacao, 
     biometrias_situacao: biometrias_situacao, 
     eventos_local: eventos_local,
-    eventos_timeline: eventos_timeline
+    eventos_timeline: eventos_timeline,
+    local: '',
+    data_hora_inicio: '',
+    data_hora_fim: ''    
   });
 });
 
 router.post('/', async function (req, res) {
+
+  var local = req.body['local'];
+  var data_hora_inicio = req.body['data_hora_inicio'];
+  var data_hora_fim = req.body['data_hora_fim'];
+
   var veiculos_situacao = await findVeiculosSituacao();
   var biometrias_situacao = await findBiometriasSituacao();
   var eventos_local = await findEventosLocal();
-  var eventos_timeline = await findEventosTimeline(req);
+  var eventos_timeline = await findEventosTimeline(local,data_hora_inicio,data_hora_fim);
   res.render('estatisticas.html', {
     veiculos_situacao: veiculos_situacao, 
     biometrias_situacao: biometrias_situacao, 
     eventos_local: eventos_local,
-    eventos_timeline: eventos_timeline
+    eventos_timeline: eventos_timeline,
+    local: local,
+    data_hora_inicio: data_hora_inicio,
+    data_hora_fim: data_hora_fim
   });
 });
 
@@ -58,18 +69,23 @@ function findEventosLocal(){
   return promise;
 }
 
-function findEventosTimeline(req){
+function findEventosTimeline(local, data_hora_inicio, data_hora_fim){
   var promise = new Promise(function(resolve, reject) { 
 
-    var filtro = {
-      $match: { local: { $in: ['001','002','003']}}
+    Date.prototype.addHours = function(h) {    
+      this.setTime(this.getTime() + (h*60*60*1000)); 
+      return this;   
     }
     
-    // local
-    if(req.body.hasOwnProperty('local')) {
-      if(req.body['local']) {
-        var filtro = {
-          $match: { local: req.body['local'] }
+    var filtro = {
+      $match: { }
+    }
+    
+    if(local && data_hora_inicio && data_hora_fim) {
+      filtro = {
+        $match: { 
+          local: local,
+          data_hora: { $gt: new Date(data_hora_inicio + 'T00:00:00Z').addHours(-3), $lt: new Date(data_hora_fim + 'T23:59:59Z').addHours(-3) }
         }
       }
     }
@@ -82,11 +98,22 @@ function findEventosTimeline(req){
     }
 
     Evento.aggregate([filtro,agrupamento]).exec(function(err, eventos){
-      console.log(eventos);
       var resultado = new Array(24).fill(0);
       for(var i = 0; i < eventos.length; i++){
         var evento = eventos[i];
-        resultado[evento._id] = evento.total;
+
+        // Devido ao horario no BD ser UTC, sera aplicado logica para ajustar para o Brasil
+        var hora = evento._id;
+        if(hora > 2){
+          hora = hora - 3
+        } else if (hora == 2) {
+          hora = 23;
+        } else if (hora == 1) {
+          hora = 22;
+        } else if (hora == 0) {
+          hora = 21;
+        }
+        resultado[hora] = evento.total;
       }
       resolve(resultado);
     });

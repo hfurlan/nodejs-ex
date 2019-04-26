@@ -4,7 +4,7 @@ var router = express.Router();
 const Evento = require('../models/evento.models.js');
 
 router.post('/salvar', function (req, res) {
-  var evento = { tipo: req.body.tipo, codigo: req.body.codigo, serial: req.body.serial, local: req.body.local, panico: req.body.panico, bateria_fraca: req.body.bateria_fraca, data_hora: new Date(parseInt(req.body.data_hora)) };
+  var evento = { tipo: req.body.tipo, codigo: req.body.codigo, serial: req.body.serial, local: req.body.local, panico: req.body.panico, bateria_fraca: req.body.bateria_fraca, data_hora: new Date(req.body.data_hora) };
   global.db.collection("eventos").insertOne(evento);
   res.send();
 });
