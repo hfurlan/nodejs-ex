@@ -18,12 +18,23 @@ router.post('/salvar', function (req, res) {
   res.send();
 });
 
-router.post('/desativar_outros', function (req, res) {
-  var ids = req.body.ids;
+router.get('/ativos', function (req, res) {
+  Biometria.find( { ativo: 'S' }, { foto: 0 }, { sort: { apartamento : 1 } }, (err, biometrias) => {
+    res.send( { biometrias: biometrias } )
+  });
+});
+
+router.post('/desativar', function (req, res) {
+  var id = req.body.id;
   global.db.collection("biometrias").update(
-    { _id: { $nin: ids } },
+    { _id: id },
     { $set: { ativo: 'N' } }
   )
+  fs.unlink("public/images/" + id + ".jpg", function (err) {
+    if (err) {
+        return console.log(err);
+    }
+  });  
   res.send();
 });
 
