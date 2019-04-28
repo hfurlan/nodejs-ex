@@ -9,20 +9,20 @@
 <% include partials/header %>
 <div class="container-fluid">
     <div class="row">
-        <div class="col-xl">
-            <div class="container" ng-controller="OnlineVeiculosController as controller">
-                <h1>Acesso veiculo</h1>
+        <div class="col" ng-controller="OnlineVeiculosController as controller">
+            <h1>Acesso veiculo</h1>
+            <div class="container-fluid">
                 <div class="row">
-                    <div class="col-xl-4">
-                        Apartamento: <span style="background-color: lightgray; font-size: 36px; font-weight: bold">{{controller.veiculo.apartamento}}</span><br/>
+                    <div class="col">
+                        Apartamento: <span style="background-color: lightgray; font-size: 42px; font-weight: bold">{{controller.veiculo.apartamento}}</span><br/>
                         Nome: {{controller.veiculo.rotulo}}<br/>
                         Marca: {{controller.veiculo.marca}}<br/>
                         Cor: {{controller.veiculo.cor}}<br/>
                     </div>
-                    <div class="col-xl-4" style="background-color: lightgray; font-size: 72px; font-weight: bold; text-align: center">
+                    <div class="col" style="background-color: lightgray; font-size: 86px; font-weight: bold; text-align: center">
                         {{controller.veiculo.placa}}
                     </div>
-                    <div class="col-xl-4">
+                    <div class="col">
                         Data: {{controller.data_hora}}<br/>
                         <span style="background-color: {{controller.bateriaFracaCor}};">Bateria Fraca: {{controller.bateriaFraca}}</span><br/>
                         <span style="background-color: {{controller.panicoCor}};">Panico: {{controller.panico}}</span><br/>
@@ -30,19 +30,25 @@
                     </div>
                 </div>
                 <div class="row">
-                    <h1>Pessoas mesmo apartamento</h1>
-                </div>
-                <div class="row" id="evento_veiculo_biometria_associadas">
-                    <div ng-repeat="pessoaMesmoApartamento in controller.pessoasMesmoApartamento">
-                        <div class="col-xl-2"><img src="/images/{{pessoaMesmoApartamento._id}}.jpg"/><br/><span>{{pessoaMesmoApartamento.nome}}</span></div>
+                    <div class="col">
+                        <h1>Pessoas mesmo apartamento</h1>
+                        <div class="container">
+                            <div class="row">
+                                <div class="col" ng-repeat="pessoaMesmoApartamento in controller.pessoasMesmoApartamento">
+                                    <img src="/images/{{pessoaMesmoApartamento._id}}.jpg"/><br/><span>{{pessoaMesmoApartamento.nome}}</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="row">
-                    <h1>Veiculos mesmo apartamento</h1>
-                </div>
-                <div class="row" id="evento_veiculo_associados">
-                    <div ng-repeat="veiculoMesmoApartamento in controller.veiculosMesmoApartamento">
-                        <div class="col-xl-2">Marca: {{veiculoMesmoApartamento.marca}}<br/>Cor: {{veiculoMesmoApartamento.cor}}<br/>Placa: {{veiculoMesmoApartamento.placa}}<br/></div>
+                    <div class="col"> 
+                        <h1>Veiculos mesmo apartamento</h1>
+                        <div class="container">
+                            <div class="row">
+                                <div class="col" ng-repeat="veiculoMesmoApartamento in controller.veiculosMesmoApartamento">
+                                    Marca: {{veiculoMesmoApartamento.marca}}<br/>Cor: {{veiculoMesmoApartamento.cor}}<br/><span style="background-color: lightgray; font-size: 24px; font-weight: bold">{{veiculoMesmoApartamento.placa}}</span><br/>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
