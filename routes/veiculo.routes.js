@@ -57,9 +57,7 @@ router.get('/expirados', function (req, res) {
     console.log(`Veiculos encontrados = ${veiculos.length}`);
     for (i = 0; i < veiculos.length; i++) { 
       var veiculo = veiculos[i];
-      console.log(`Veiculo ${veiculo._id}`);
       var expirado = await isExpirado(veiculo._id, d);
-      console.log(`Veiculo expirado ${expirado}`);
       if (expirado) {
         veiculos_expirados.push(veiculo);
       }  
@@ -70,14 +68,13 @@ router.get('/expirados', function (req, res) {
 
 // procurar veiculo que esta com aviso de bateria fraca
 router.get('/bateria_fraca', function (req, res) {
+  console.log(`Procurando veiculos com aviso de bateria fraca`);
   var veiculos_bateria_fraca = [];
   Veiculo.find({ativo: 'S'}, null, { sort: { apartamento : 1 } }, async function (err, veiculos) {
     console.log(`Veiculos encontrados = ${veiculos.length}`);
     for (i = 0; i < veiculos.length; i++) { 
       var veiculo = veiculos[i];
-      console.log(`Veiculo ${veiculo._id}`);
       var bateriaFraca = await isBateriaFraca(veiculo._id);
-      console.log(`Veiculo bateriaFraca ${bateriaFraca}`);
       if (bateriaFraca) {
         veiculos_bateria_fraca.push(veiculo);
       }  
@@ -90,7 +87,7 @@ function isBateriaFraca(id){
   var promise = new Promise(function(resolve, reject) { 
     Evento.find({ serial: id, tipo: 'L' }, null, { sort: { data_hora : -1 } }, (err, eventos) => {
       resolve(eventos.length == 1 && eventos[0].bateria_fraca == 'S');
-    });
+    }).limit(1);
   });
   return promise;
 }
@@ -98,8 +95,7 @@ function isBateriaFraca(id){
 function isExpirado(id, dataLimite){
   var promise = new Promise(function(resolve, reject) { 
     Evento.find({ serial: id, tipo: 'L', data_hora: { $lt: dataLimite }, data_hora: { $not: { $gt: dataLimite } } }, null, {}, (err, eventos) => {
-      console.log(`Eventos do ${id} = ${eventos.length}`);
-      resolve(eventos.length == 0);
+      resolve(eventos.length > 0);
     });  
   });
   return promise;
