@@ -6,8 +6,9 @@
 <body>
 <% include partials/header %>
 <h1 class="text-center title-1"> Lista de Veiculos </h1>
-<a href="/veiculos">Veiculos</a>
-<a href="/veiculos/expirados">Veiculos Expirados</a>
+<a class="btn btn-primary" href="/veiculos">Veiculos</a>
+<a class="btn btn-danger" href="/veiculos/expirados">Veiculos Expirados</a>
+<a class="btn btn-warning" href="/veiculos/bateria_fraca">Veiculos Bateria Fraca</a>
 <form action="veiculos" method="POST">
 <table>
   <tr>
@@ -28,7 +29,7 @@
     <th><input type="text" name="placa"/></th>
     <th><input type="text" name="rotulo"/></th>
     <th><input type="text" name="ativo" size="1"/></th>
-    <th><input type="submit"/></th>
+    <th><input type="submit" value="Pesquisar"/></th>
   </tr>
   <% veiculos.forEach(function(veiculo){ %>
   <tr>
