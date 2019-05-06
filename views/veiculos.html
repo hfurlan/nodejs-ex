@@ -7,8 +7,9 @@
 <% include partials/header %>
 <h1 class="text-center title-1"> Lista de Veiculos </h1>
 <a class="btn btn-primary" href="/veiculos">Veiculos</a>
-<a class="btn btn-danger" href="/veiculos/expirados">Veiculos Expirados</a>
 <a class="btn btn-warning" href="/veiculos/bateria_fraca">Veiculos Bateria Fraca</a>
+<a class="btn btn-warning" href="/veiculos/sem_eventos">Veiculos Sem Eventos</a>
+<a class="btn btn-danger" href="/veiculos/expirados">Veiculos Expirados</a>
 <form action="veiculos" method="POST">
 <table>
   <tr>
@@ -40,6 +41,7 @@
     <td><%= veiculo.placa %></td>
     <td><%= veiculo.rotulo %></td>
     <td><%= veiculo.ativo %></td>
+    <td><%= veiculo.data_cadastro.toISOString() %></td>
   </tr>
   <%})%>
 </table>

@@ -66,6 +66,25 @@ router.get('/expirados', function (req, res) {
   });
 });
 
+// procurar veiculos que foram cadastrados a mais de 90 dias porem nao possuem eventos
+router.get('/sem_eventos', function (req, res) {
+  var d = new Date();
+  d.setDate(d.getDate() - 90); //minus 90 days
+  console.log(`Procurando veiculos cadastrados a mais de 90 dias e sem evento`);
+  var veiculos_sem_eventos = [];
+  Veiculo.find({ativo: 'S', data_cadastro: { $lt: d } }, null, { sort: { apartamento : 1 } }, async function (err, veiculos) {
+    console.log(`Veiculos encontrados = ${veiculos.length}`);
+    for (i = 0; i < veiculos.length; i++) { 
+      var veiculo = veiculos[i];
+      var semEvento = await isSemEvento(veiculo._id);
+      if (semEvento) {
+        veiculos_sem_eventos.push(veiculo);
+      }  
+    }
+    res.render('veiculos.html', { veiculos: veiculos_sem_eventos});
+  });
+});
+
 // procurar veiculo que esta com aviso de bateria fraca
 router.get('/bateria_fraca', function (req, res) {
   console.log(`Procurando veiculos com aviso de bateria fraca`);
@@ -96,6 +115,15 @@ function isExpirado(id, dataLimite){
   var promise = new Promise(function(resolve, reject) { 
     Evento.find({ serial: id, tipo: 'L', data_hora: { $lt: dataLimite }, data_hora: { $not: { $gt: dataLimite } } }, null, {}, (err, eventos) => {
       resolve(eventos.length > 0);
+    });  
+  });
+  return promise;
+}
+
+function isSemEvento(id){
+  var promise = new Promise(function(resolve, reject) { 
+    Evento.find({ serial: id, tipo: 'L' }, null, {}, (err, eventos) => {
+      resolve(eventos.length == 0);
     });  
   });
   return promise;
