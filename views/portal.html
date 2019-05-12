@@ -1,0 +1,59 @@
+<!doctype html>
+<html>
+<head>
+    <% include partials/head %>
+</head>
+<body>
+<% include partials/header %>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-1"></div>
+        <div class="col"><h1>Local - administracao</h1></div>
+        <div class="col"><h1>www.plenosantacruz.com.br</h1></div>
+    </div>
+    <% apartamentos.forEach(function(apartamento){ %>
+    <div class="row">
+        <div class="col-1">
+            <h1>APTO <%= apartamento.numero %></h1>
+        </div>
+        <div class="col">
+            <h3>Veiculos</h3>
+            <% apartamento.local.veiculos.forEach(function(veiculo){ %>
+                <%= veiculo.placa %> - <%= veiculo.cor %> - <%= veiculo.marca %><br/>
+            <%})%>
+            <h3>Biometrias - Funcionarios</h3>
+            <% apartamento.local.biometrias.forEach(function(biometria){ %>
+                <% if(biometria.perfil == '0004') { %>
+                <%= biometria.nome %><br/>
+                <% } %>
+            <%})%>
+            <h3>Biometrias - Moradores</h3>
+            <% apartamento.local.biometrias.forEach(function(biometria){ %>
+                <% if(biometria.perfil != '0004') { %>
+                <%= biometria.nome %><br/>
+                <% } %>
+            <%})%>
+        </div>
+        <div class="col">
+            <h3>Veiculos</h3>
+            <% apartamento.portal.veiculos.forEach(function(veiculo){ %>
+                <%= veiculo.placa %> - <%= veiculo.cor %> - <%= veiculo.montadora %><br/>
+            <%})%>
+            <h3>Funcionarios</h3>
+            <% apartamento.portal.funcionarios.forEach(function(funcionario){ %>
+                <%= funcionario.nome %><br/>
+            <%})%>
+            <h3>Proprietarios/Moradores</h3>
+            <% apartamento.portal.proprietarios.forEach(function(proprietario){ %>
+                <%= proprietario.nome %><br/>
+            <%})%>
+            <% apartamento.portal.moradores.forEach(function(morador){ %>
+                <%= morador.nome %><br/>
+            <%})%>
+        </div>
+    </div>
+    <hr style="width: 100%; color: black; height: 1px; background-color:black;" />
+    <%})%>            
+</div>
+</body>
+</html>
