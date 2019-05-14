@@ -129,7 +129,11 @@ router.get('/', async function (req, res) {
   // Veiculos
   for (i = 0; i < veiculos.length; i++) { 
     var veiculo = veiculos[i];
-    apartamentos[veiculo.apartamento].local.veiculos.push(veiculo);
+    if(veiculo.apartamento){
+      if(apartamentos[veiculo.apartamento]){
+        apartamentos[veiculo.apartamento].local.veiculos.push(veiculo);
+      }
+    }
   }
 
   // Biometrias
