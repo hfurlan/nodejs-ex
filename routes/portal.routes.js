@@ -130,8 +130,9 @@ router.get('/', async function (req, res) {
   for (i = 0; i < veiculos.length; i++) { 
     var veiculo = veiculos[i];
     if(veiculo.apartamento){
-      if(apartamentos[veiculo.apartamento]){
-        apartamentos[veiculo.apartamento].local.veiculos.push(veiculo);
+      var apartamento = "" + parseInt(veiculo.apartamento)
+      if(apartamentos[apartamento]){
+        apartamentos[apartamento].local.veiculos.push(veiculo);
       }
     }
   }
@@ -140,8 +141,9 @@ router.get('/', async function (req, res) {
   for (i = 0; i < biometrias.length; i++) { 
     var biometria = biometrias[i];
     if(biometria.apartamento){
-      if(apartamentos[biometria.apartamento]){
-        apartamentos[biometria.apartamento].local.biometrias.push(biometria);
+      var apartamento = "" + parseInt(biometria.apartamento)
+      if(apartamentos[apartamento]){
+        apartamentos[apartamento].local.biometrias.push(biometria);
       }  
     }
   }

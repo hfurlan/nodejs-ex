@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <% include partials/head %>
+</head>
+<body>
+<% include partials/header %>
+<h1 class="text-center title-1">Lista de Configs</h1>
+<table>
+  <tr>
+    <th><a href="configs?order=_id">#</a></th>
+    <th><a href="configs?order=valor">Valor</a></th>
+    <th>&nbsp;</th>
+  </tr>
+  <% configs.forEach(function(config){ %>
+  <tr>
+    <td><%= config._id %></td>
+    <td><%= config.valor %></td>
+    <td><a href="/configs/editar?id=<%= config._id %>">Editar</a><a href="/configs/remover?id=<%= config._id %>">Remover</a></td>
+  </tr>
+  <%})%>
+  <tr>
+    <td colspan="3"><a href="/configs/novo">Novo</a></td>
+  </tr>
+</table>
+</body>
+</html>
