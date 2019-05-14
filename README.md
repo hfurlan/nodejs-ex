@@ -33,4 +33,4 @@ curl -d "serial=ABCDEFG&marca=HONDA&cor=PRATA&placa=EJQ2449&apartamento=271&rotu
 curl -d "tipo=B&codigo=000123&local=001&panico=N&bateria_fraca=N&data_hora=2019-04-25T05:47:00" -X POST http://localhost:8080/eventos/salvar
 
 ### evento veiculo
-curl -d "tipo=L&serial=ABCDEFG&local=001&panico=N&bateria_fraca=N&data_hora=2019-04-25T05:48:00" -X POST http://localhost:8080/eventos/salvar
+curl -d "tipo=L&serial=ABCDEFH&local=001&panico=N&bateria_fraca=N&data_hora=2019-04-26T05:49:01" -X POST http://localhost:8080/eventos/salvar
