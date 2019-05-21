@@ -42,6 +42,7 @@ app.use('/online_veiculos', require('./routes/online_veiculos.routes.js'));
 app.use('/estatisticas', require('./routes/estatisticas.routes.js'));
 app.use('/portal', require('./routes/portal.routes.js'));
 app.use('/configs', require('./routes/config.routes.js'));
+app.use('/sincronizador', require('./routes/sincronizador.routes.js'));
 
 // error handling
 app.use(function(err, req, res, next){
