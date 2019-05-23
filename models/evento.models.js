@@ -8,7 +8,8 @@ var EventoSchema = new mongoose.Schema({
     tipo: String,
     panico: String,
     bateria_fraca: String,
-    data_hora: Date
+    data_hora: Date,
+    apartamento: String
   });
 
 module.exports = mongoose.model('Evento', EventoSchema);

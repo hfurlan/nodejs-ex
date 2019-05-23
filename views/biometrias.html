@@ -23,7 +23,10 @@
     <th><input type="text" name="nome"/></th>
     <th><input type="text" name="perfil"/></th>
     <th><input type="text" name="ativo" size="1"/></th>
-    <th><input type="submit"/></th>
+    <th></th>
+    <th>Data Cadastro</th>
+    <th>Data Ultimo Evento</th>
+    <th><input type="submit" value="Pesquisar" class="btn"/></th>
   </tr>  
   <% biometrias.forEach(function(biometria){ %>
   <tr>
@@ -33,6 +36,8 @@
     <td><%= biometria.perfil %></td>
     <td><%= biometria.ativo %></td>
     <td><img src="/images/<%= biometria._id %>.jpg"></td>
+    <td><%= biometria.data_cadastro.toISOString() %></td>
+    <td><% if(biometria.data_ultimo_evento) { %><%= biometria.data_ultimo_evento.toISOString() %><% } %></td>
   </tr>
   <%})%>
 </table>

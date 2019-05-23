@@ -6,6 +6,15 @@
 <body>
 <% include partials/header %>
 <div class="container-fluid">
+    <divc class="row">
+        <div class="col">
+            <form action="portal" method="GET">
+            Apartamento: <input type="text" name="apartamento" size="5"/> 
+            Situacao: <select name="situacao"><option value="">----</option><option value="red" style="background-color: red">VERMELHO</option><option value="yellow" style="background-color: yellow">AMARELO</option><option value="green" style="background-color: green">VERDE</option></select>
+            <input type="submit" value="Pesquisar" class="btn"/>
+            </form>
+        </div>
+    </div>
     <div class="row">
         <div class="col-1"></div>
         <div class="col"><h1>Local - administracao</h1></div>
@@ -14,23 +23,23 @@
     <% apartamentos.forEach(function(apartamento){ %>
     <div class="row">
         <div class="col-1">
-            <h1>APTO <%= apartamento.numero %></h1>
+            <h1>APTO <%= apartamento.numero %></br><span style="background-color: <%= apartamento.situacao %>; font-size: 42px; font-weight: bold">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></h1>
         </div>
         <div class="col">
             <h3>Veiculos</h3>
             <% apartamento.local.veiculos.forEach(function(veiculo){ %>
-                <%= veiculo.placa %> - <%= veiculo.cor %> - <%= veiculo.marca %><br/>
+                <%= veiculo.placa %> - <%= veiculo.cor %> - <%= veiculo.marca %> (<%= veiculo._id %>) [<% if(veiculo.data_ultimo_evento) { %><%= veiculo.data_ultimo_evento.toISOString() %><% } %>]<br/>
             <%})%>
             <h3>Biometrias - Funcionarios</h3>
             <% apartamento.local.biometrias.forEach(function(biometria){ %>
                 <% if(biometria.perfil == '0004') { %>
-                <%= biometria.nome %><br/>
+                <%= biometria.nome %> [<% if(biometria.data_ultimo_evento) { %><%= biometria.data_ultimo_evento.toISOString() %><% } %>]<br/>
                 <% } %>
             <%})%>
             <h3>Biometrias - Moradores</h3>
             <% apartamento.local.biometrias.forEach(function(biometria){ %>
                 <% if(biometria.perfil != '0004') { %>
-                <%= biometria.nome %><br/>
+                <%= biometria.nome %> [<% if(biometria.data_ultimo_evento) { %><%= biometria.data_ultimo_evento.toISOString() %><% } %>]<br/>
                 <% } %>
             <%})%>
         </div>

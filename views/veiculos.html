@@ -30,7 +30,9 @@
     <th><input type="text" name="placa"/></th>
     <th><input type="text" name="rotulo"/></th>
     <th><input type="text" name="ativo" size="1"/></th>
-    <th><input type="submit" value="Pesquisar"/></th>
+    <th>Data Cadastro</th>
+    <th>Data Ultimo Evento</th>
+    <th><input type="submit" value="Pesquisar" class="btn"/></th>
   </tr>
   <% veiculos.forEach(function(veiculo){ %>
   <tr>
@@ -42,6 +44,7 @@
     <td><%= veiculo.rotulo %></td>
     <td><%= veiculo.ativo %></td>
     <td><%= veiculo.data_cadastro.toISOString() %></td>
+    <td><% if(veiculo.data_ultimo_evento) { %><%= veiculo.data_ultimo_evento.toISOString() %><% } %></td>
   </tr>
   <%})%>
 </table>

@@ -122,7 +122,7 @@ router.get('/', async function (req, res) {
   var apartamentos = [];
   for (i = 0; i < portalProprietarios.length; i++) { 
     var apartNum = portalProprietarios[i].apartamento;
-    apartamentos[apartNum] = { numero: apartNum, local: { veiculos: [], biometrias: [] }, portal: { proprietarios: [], funcionarios: [], veiculos: [], moradores: [] } };
+    apartamentos[apartNum] = { numero: apartNum, situacao: 'green', local: { veiculos: [], biometrias: [] }, portal: { proprietarios: [], funcionarios: [], veiculos: [], moradores: [] } };
   }
   console.log('Total Apartamentos:' + apartamentos.length);
 
@@ -176,14 +176,61 @@ router.get('/', async function (req, res) {
   for (i = 0; i < apartamentos.length; i++) {
     var apartamento = apartamentos[i];
     if(apartamento){
-      apartamento.local.veiculos.sort(sort_by('placa', false, function(a){return a.toUpperCase()}));
-      apartamento.local.biometrias.sort(sort_by('nome', false, function(a){return a.toUpperCase()}));
-      apartamento.portal.veiculos.sort(sort_by('placa', false, function(a){return a.toUpperCase()}));
-      apartamento.portal.funcionarios.sort(sort_by('nome', false, function(a){return a.toUpperCase()}));
-      apartamento.portal.proprietarios.sort(sort_by('nome', false, function(a){return a.toUpperCase()}));
-      apartamento.portal.moradores.sort(sort_by('nome', false, function(a){return a.toUpperCase()}));  
+      apartamento.local.veiculos.sort(function (a, b) {
+        return a.placa.toUpperCase().localeCompare(b.placa.toUpperCase());
+      });
+      apartamento.local.biometrias.sort(function (a, b) {
+        return a.nome.toUpperCase().localeCompare(b.nome.toUpperCase());
+      });
+      apartamento.portal.veiculos.sort(function (a, b) {
+        return a.placa.toUpperCase().localeCompare(b.placa.toUpperCase());
+      });
+      apartamento.portal.funcionarios.sort(function (a, b) {
+        return a.nome.toUpperCase().localeCompare(b.nome.toUpperCase());
+      });
+      apartamento.portal.proprietarios.sort(function (a, b) {
+        return a.nome.toUpperCase().localeCompare(b.nome.toUpperCase());
+      });
+      apartamento.portal.moradores.sort(function (a, b) {
+        return a.nome.toUpperCase().localeCompare(b.nome.toUpperCase());
+      });  
+      
+      // Se nao bater as quantidades entao a situacao vai ficar RED
+      if(apartamento.local.veiculos.length != apartamento.portal.veiculos.length || apartamento.local.biometrias.length != ( apartamento.portal.funcionarios.length + apartamento.portal.proprietarios.length + apartamento.portal.moradores.length )){
+        apartamento.situacao = 'red';
+      }
+      else if(apartamento.local.veiculos.length == apartamento.portal.veiculos.length && apartamento.local.biometrias.length == ( apartamento.portal.funcionarios.length + apartamento.portal.proprietarios.length + apartamento.portal.moradores.length )){
+        for (j = 0; j < apartamento.local.veiculos; j++) {
+          if(apartamento.local.veiculos[j].placa != apartamento.portal.veiculos[j].placa){
+            apartamento.situacao = 'yellow';
+            break;
+          }
+        }
+      }
     }
-  }  
+  }
+  
+  // Caso tenha enviado algum filtro, entao os demais registros que nao estao no filtro devem ser removidos
+  if(req.param('apartamento')){
+    for( var i = 0; i < apartamentos.length; i++){ 
+      if(apartamentos[i]){
+        if ( apartamentos[i].numero != req.param('apartamento')) {
+          apartamentos.splice(i, 1); 
+          i--;          
+        }  
+      }
+    }
+  }
+  if(req.param('situacao')){
+    for( var i = 0; i < apartamentos.length; i++ ){ 
+      if(apartamentos[i]){
+        if ( apartamentos[i].situacao != req.param('situacao')) {
+          apartamentos.splice(i, 1); 
+          i--;          
+        }  
+      }
+    }
+  }
 
   console.log(apartamentos.length);
 
@@ -242,19 +289,6 @@ function buscarBiometrias(){
     });
   });
   return promise;
-}
-
-var sort_by = function(field, reverse, primer){
-
-  var key = primer ? 
-      function(x) {return primer(x[field])} : 
-      function(x) {return x[field]};
-
-  reverse = !reverse ? 1 : -1;
-
-  return function (a, b) {
-      return a = key(a), b = key(b), reverse * ((a > b) - (b > a));
-    } 
 }
 
 module.exports = router;

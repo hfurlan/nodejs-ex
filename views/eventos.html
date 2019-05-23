@@ -10,6 +10,7 @@
 <table>
   <tr>
     <th>#</th>
+    <th>Apto</th>
     <th>Codigo/Serial</th>
     <th>Tipo</th>
     <th>Local</th>
@@ -20,17 +21,19 @@
   </tr>
   <tr>
     <th></th>
+    <th><input type="text" name="apartamento" size="3"></th>
     <th><input type="text" name="codigo" size="5">/<input type="text" name="serial" size="5"/></th>
     <th><input type="text" name="tipo" size="1"/></th>
     <th><input type="text" name="local" size="3"/></th>
     <th><input type="text" name="panico" size="1"/></th>
     <th><input type="text" name="bateria_fraca" size="1"/></th>
     <th>Data</th>
-    <th><input type="submit"/></th>
+    <th><input type="submit" value="Pesquisar" class="btn"/></th>
   </tr>
   <% eventos.forEach(function(evento){ %>
   <tr>
     <td><%= evento._id %></td>
+    <td><%= evento.apartamento %></td>
     <td><%= evento.codigo %><%= evento.serial %></td>
     <td><%= evento.tipo %></td>
     <td><%= evento.local %></td>
