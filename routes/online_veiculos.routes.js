@@ -13,7 +13,7 @@ router.get('/', function (req, res) {
 
 router.post('/online_veiculo', function (req, res) {
   var evento_veiculo_id = req.body.evento_veiculo_id;
-  console.log('evento_veiculo_id:%s', evento_veiculo_id);
+  console.log('evento_veiculo_id:%s - %s', req.connection.remoteAddress, evento_veiculo_id);
   Evento.findOne({ tipo: 'L', serial: { $ne: null }, serial: { $ne: '' }, _id: { $ne: evento_veiculo_id } }, null, { sort: { data_hora: -1 } }, (err, evento_veiculo) => {
     if (err) throw err;
     if (evento_veiculo == null || evento_veiculo._id === evento_veiculo_id) {

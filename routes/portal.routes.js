@@ -199,7 +199,7 @@ router.get('/', async function (req, res) {
       if(apartamento.local.veiculos.length != apartamento.portal.veiculos.length || apartamento.local.biometrias.length != ( apartamento.portal.funcionarios.length + apartamento.portal.proprietarios.length + apartamento.portal.moradores.length )){
         apartamento.situacao = 'red';
       }
-      else if(apartamento.local.veiculos.length == apartamento.portal.veiculos.length && apartamento.local.biometrias.length == ( apartamento.portal.funcionarios.length + apartamento.portal.proprietarios.length + apartamento.portal.moradores.length )){
+      if(apartamento.local.veiculos.length == apartamento.portal.veiculos.length && apartamento.local.biometrias.length == ( apartamento.portal.funcionarios.length + apartamento.portal.proprietarios.length + apartamento.portal.moradores.length )){
         for (j = 0; j < apartamento.local.veiculos; j++) {
           if(apartamento.local.veiculos[j].placa != apartamento.portal.veiculos[j].placa){
             apartamento.situacao = 'yellow';

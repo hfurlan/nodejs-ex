@@ -4,25 +4,32 @@ var router = express.Router();
 const Evento = require('../models/evento.models.js');
 const Veiculo = require('../models/veiculo.models.js');
 const Biometria = require('../models/biometria.models.js');
+const MailService = require('../services/mail.services.js');
 
 router.post('/salvar', async function (req, res) {
+  var bloco = "-";
   var apartamento = "-";
   if(req.body.tipo == 'L'){
     var veiculo = await buscarVeiculo(req.body.serial);
     if(veiculo){
       apartamento = veiculo.apartamento;
+      bloco = veiculo.bloco;
       veiculo.data_ultimo_evento = new Date();
-      global.db.collection("veiculos").update({ _id : veiculo._id }, veiculo, {upsert: true})
+      global.db.collection("veiculos").updateOne({ _id : veiculo._id }, veiculo);
+      if(apartamento == '271'){
+        MailService.sendHtmlMail(['hildebrando.furlan@gmail.com'], 'Teste envio Email', 'Teste de envio de email');
+      }
     }
   } else if(req.body.tipo == 'B'){
     var biometria = await buscarBiometria(req.body.codigo);
     if(biometria){
       apartamento = biometria.apartamento;
+      bloco = biometria.bloco;
       biometria.data_ultimo_evento = new Date();
-      global.db.collection("biometrias").update({ _id : biometria._id }, biometria, {upsert: true})
+      global.db.collection("biometrias").updateOne({ _id : biometria._id }, biometria);
     }
   }
-  var evento = { tipo: req.body.tipo, codigo: req.body.codigo, serial: req.body.serial, local: req.body.local, panico: req.body.panico, bateria_fraca: req.body.bateria_fraca, data_hora: new Date(req.body.data_hora), apartamento: apartamento };
+  var evento = { tipo: req.body.tipo, codigo: req.body.codigo, serial: req.body.serial, local: req.body.local, panico: req.body.panico, bateria_fraca: req.body.bateria_fraca, data_hora: new Date(req.body.data_hora), apartamento: apartamento, bloco: bloco };
   global.db.collection("eventos").insertOne(evento);
   res.send();
 });

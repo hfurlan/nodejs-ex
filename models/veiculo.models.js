@@ -2,10 +2,12 @@ var mongoose = require('mongoose')
 
 var VeiculoSchema = new mongoose.Schema({
     _id: String,
+    condominio: String,
+    bloco: String,
+    apartamento: String,
     marca: String,
     cor: String,
     placa: String,
-    apartamento: String,
     rotulo: String,
     ativo: String, 
     data_cadastro: Date,

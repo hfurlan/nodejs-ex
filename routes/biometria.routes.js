@@ -5,7 +5,7 @@ var fs = require('fs');
 const Biometria = require('../models/biometria.models.js');
 
 router.post('/salvar', function (req, res) {
-  var biometria = { _id: req.body.codigo, nome: req.body.nome, perfil: req.body.perfil, perfil_acesso: req.body.perfil_acesso, apartamento: req.body.apartamento, foto: req.body.foto, observacoes: req.body.observacoes, ativo: 'S', data_cadastro: new Date(req.body.data_cadastro), data_envio: new Date(req.body.data_envio) };
+  var biometria = { _id: req.body.codigo, condominio: req.body.condominio, bloco: req.body.bloco, apartamento: req.body.apartamento, nome: req.body.nome, perfil: req.body.perfil, perfil_acesso: req.body.perfil_acesso, foto: req.body.foto, observacoes: req.body.observacoes, ativo: 'S', data_cadastro: new Date(req.body.data_cadastro), data_envio: new Date(req.body.data_envio) };
   global.db.collection("biometrias").update({ _id : biometria._id }, biometria, {upsert: true})
   if(biometria.foto){
     var b = new Buffer(biometria.foto, 'hex');

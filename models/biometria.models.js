@@ -2,10 +2,12 @@ var mongoose = require('mongoose')
 
 var BiometriaSchema = new mongoose.Schema({
     _id: String,
+    condominio: String,
+    bloco: String,
+    apartamento: String,
     nome: String,
     perfil: String,
     perfil_acesso: String,
-    apartamento: String,
     foto: String,
     observacoes: String,
     ativo: String,

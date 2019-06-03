@@ -34,3 +34,6 @@ curl -d "tipo=B&codigo=000123&local=001&panico=N&bateria_fraca=N&data_hora=2019-
 
 ### evento veiculo
 curl -d "tipo=L&serial=ABCDEFH&local=001&panico=N&bateria_fraca=N&data_hora=2019-04-26T05:49:01" -X POST http://localhost:8080/eventos/salvar
+
+### evento veiculo - bateria fraca
+curl -d "tipo=L&serial=ABCDEFH&local=001&panico=N&bateria_fraca=S&data_hora=2019-04-26T05:49:03&condominio=1" -X POST http://localhost:8080/eventos/salvar
