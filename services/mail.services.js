@@ -24,6 +24,7 @@ function getMailReceivers(mailReceivers){ // convert the string array to one str
 function getMailOptions(mailReceivers, subject, html){ // set the mail options and return them
   return {
     from: from,
+    cc: from,
     to: getMailReceivers(mailReceivers),
     subject: subject,
     html: html
