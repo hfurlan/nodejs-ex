@@ -6,6 +6,31 @@
 <body>
 <% include partials/header %>
 <h1 class="text-center title-1">Sincronizador</h1>
-<%= locals.msg %>
+<a class="btn btn-primary" href="/sincronizador">Status</a>
+<a class="btn btn-primary" href="/sincronizador/restart">Restart</a>
+</br>
+<% if(locals.msg) { %>
+  VIRDI_EVENTO: <%= locals.msg.VIRDI_EVENTO %>
+  <br/>
+  VIRDI_CADASTRO: <%= locals.msg.VIRDI_CADASTRO %>
+  <br/>
+  VIRDI_ERRO: <%= locals.msg.VIRDI_ERRO %>
+  <br/>
+  LINEAR_CONEXAO: <%= locals.msg.LINEAR_CONEXAO %>
+  <br/>
+  LINEAR_EVENTO: <%= locals.msg.LINEAR_EVENTO %>
+  <br/>
+  LINEAR_CADASTRO: <%= locals.msg.LINEAR_CADASTRO %>
+  <br/>
+  LINEAR_ERRO: <%= locals.msg.LINEAR_ERRO %>
+  <br/>
+  PORTAL: <%= locals.msg.PORTAL %>
+  <br/>
+  LOCAL_HTTP: <%= locals.msg.LOCAL_HTTP %>
+  <br/>
+  MAIN: <%= locals.msg.MAIN %>
+  <hr style="width: 100%; color: black; height: 1px; background-color:black;" />
+  <%= locals.msg %>
+<% } %>
 </body>
 </html>
