@@ -10,7 +10,7 @@ const PortalProprietario = require('../models/portalproprietario.models.js');
 router.post('/salvar', async function (req, res) {
   var bloco = "-";
   var apartamento = "-";
-  if(req.body.tipo == 'L'){
+  if(req.body.tipo == 'L' && req.body.serial != '' && req.body.serial != '0000000'){
     var veiculo = await buscarVeiculo(req.body.serial);
     if(veiculo){
       apartamento = veiculo.apartamento;
