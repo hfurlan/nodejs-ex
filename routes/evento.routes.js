@@ -25,7 +25,7 @@ router.post('/salvar', async function (req, res) {
         });  
         var titulo = 'PLENO SANTA CRUZ - APTO ' + apartamento + ': AVISO CONTROLE VEICULO BATERIA FRACA'
         var html = 'O sistema de controle de acesso do seu condominio identificou que controle de veiculo da sua unidade esta com a bateria fraca. MARCA:' + veiculo.marca + ' - COR:' + veiculo.cor + ' - PLACA:' + veiculo.placa + '. Favor trocar a bateria/pilha ou comparecer na administracao para ajuda.'
-        MailService.sendHtmlMail(emailsTo, titulo, html);
+        //MailService.sendHtmlMail(emailsTo, titulo, html);
       }
     }
   } else if(req.body.tipo == 'B'){
